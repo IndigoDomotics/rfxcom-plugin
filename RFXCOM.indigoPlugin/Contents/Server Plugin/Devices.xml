@@ -1,0 +1,1505 @@
+<?xml version="1.0"?>
+<Devices>
+
+	<Device type="relay" id="X10Appliance">
+		<Name>X10 Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+		</ConfigUI>
+	</Device>
+
+	<Device type="relay" id="ARCAppliance">
+		<Name>ARC Appliance (KaKu with wheels)</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="relay" id="ELROAppliance">
+		<Name>ELRO Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+
+	<Device type="relay" id="BlyssAppliance">
+		<Name>Blyss Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-5):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="X10Dimmer">
+		<Name>X10 Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="relay" id="ACAppliance">
+		<Name>AC Appliance (new KaKu)</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="ACDimmer">
+		<Name>AC Dimmer (new KaKu)</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+
+	<Device type="relay" id="RollerTrol">
+		<Name>RollerTrol</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+
+	<Device type="relay" id="Brel">
+		<Name>Brel</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+		
+	<Device type="relay" id="Somfy">
+		<Name>Somfy</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-4):</Label>
+			</Field>
+			<Field type="checkbox" id="isUS" defaultValue="false">
+				<Label></Label>
+				<Description>US mode</Description>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="relay" id="Mertik">
+		<Name>Mertik</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Unitcode (format FFFFFF):</Label>
+			</Field>
+			<Field type="checkbox" id="isUS" defaultValue="false">
+				<Label></Label>
+				<Description>off = G6R-H4T1/on = G6R-H4TB/G6-H4T/G6R-H4T21-Z22</Description>
+			</Field>			
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+	
+	<Device type="relay" id="Harrison">
+		<Name>Harrison</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="relay" id="LWAppliance">
+		<Name>LightWave Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="LWDimmer">
+		<Name>LightWave Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+	
+	<Device type="dimmer" id="MDRemote">
+		<Name>MDRemote LED Strip Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+
+	<Device type="dimmer" id="LivoloDimmer">
+		<Name>Livolo Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="RGBDimmer">
+		<Name>RGB TRC02 Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+
+	<Device type="relay" id="EMW100Appliance">
+		<Name>EMW100 Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="EMW100Dimmer">
+		<Name>EMW100 Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+		
+	<Device type="relay" id="HEAppliance">
+		<Name>Home Easy Appliance</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="dimmer" id="HEDimmer">
+		<Name>Home Easy Dimmer</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>	
+	
+	<Device type="custom" id="Temperature">
+		<Name>Temperature Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="TempHumid">
+				<Label>Display: </Label>
+				<List>
+					<Option value="TempHumid">Temp / Humidity</Option>
+					<Option value="Temp">Temp</Option>
+					<Option value="TempMinMaxHumid">Temp (Min - Max) / Humidity</Option>
+					<Option value="TempMinMax">Temp (Min - Max)</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>
+			<State id="temperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature</TriggerLabel>
+				<ControlPageLabel>Temperature</ControlPageLabel>
+			</State>
+			<State id="mintemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature</TriggerLabel>
+				<ControlPageLabel>Min. temperature</ControlPageLabel>
+			</State>
+			<State id="maxtemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature</TriggerLabel>
+				<ControlPageLabel>Max. temperature</ControlPageLabel>
+			</State>
+			<State id="humidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Humidity</TriggerLabel>
+				<ControlPageLabel>Humidity</ControlPageLabel>
+			</State>
+			<State id="minhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity</TriggerLabel>
+				<ControlPageLabel>Min. humidity</ControlPageLabel>
+			</State>
+			<State id="maxhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity</TriggerLabel>
+				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="humidityStatus">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Humidity Status</TriggerLabel>
+				<ControlPageLabel>Humidity Status</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="Doorbell">
+		<Name>Doorbell</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor (ID1+ID2):</Label>
+			</Field>	
+			<Field id="displayField" type="Menu" defaultValue="Sound">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Sound">Sound</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>
+			<State id="Sound">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature1</TriggerLabel>
+				<ControlPageLabel>Temperature1</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+	
+	<Device type="custom" id="BBQ">
+		<Name>BBQ Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor (ID1+ID2):</Label>
+			</Field>	
+			<Field id="displayField" type="Menu" defaultValue="Temp12">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Temp1">Temperature 1</Option>
+					<Option value="Temp2">Temperature 2</Option>
+					<Option value="Temp12">Temperature 1 and 2</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>
+			<State id="temperature1">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature1</TriggerLabel>
+				<ControlPageLabel>Temperature1</ControlPageLabel>
+			</State>
+			<State id="temperature2">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature2</TriggerLabel>
+				<ControlPageLabel>Temperature2</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="Barometer">
+		<Name>Barometer Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="TempHumidBaro">
+				<Label>Display: </Label>
+				<List>
+					<Option value="TempHumidBaro">Temp / Humidity / Barometer</Option>
+					<Option value="Temp">Temp</Option>
+					<Option value="Barometer">Barometer</Option>	
+					<Option value="Forecast">Forecast</Option>									
+					<Option value="TempMinMaxHumidBaro">Temp (Min - Max) / Humidity / Barometer</Option>
+					<Option value="TempMinMax">Temp (Min - Max)</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>
+			<State id="temperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature</TriggerLabel>
+				<ControlPageLabel>Temperature</ControlPageLabel>
+			</State>
+			<State id="mintemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature</TriggerLabel>
+				<ControlPageLabel>Min. temperature</ControlPageLabel>
+			</State>
+			<State id="maxtemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature</TriggerLabel>
+				<ControlPageLabel>Max. temperature</ControlPageLabel>
+			</State>
+			<State id="humidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Humidity</TriggerLabel>
+				<ControlPageLabel>Humidity</ControlPageLabel>
+			</State>
+			<State id="minhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity</TriggerLabel>
+				<ControlPageLabel>Min. humidity</ControlPageLabel>
+			</State>
+			<State id="maxhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity</TriggerLabel>
+				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="barometer">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Humidity</TriggerLabel>
+				<ControlPageLabel>Humidity</ControlPageLabel>
+			</State>
+			<State id="minbarometer">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity</TriggerLabel>
+				<ControlPageLabel>Min. humidity</ControlPageLabel>
+			</State>
+			<State id="maxbarometer">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity</TriggerLabel>
+				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="forecast">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Forecast</TriggerLabel>
+				<ControlPageLabel>Forecast</ControlPageLabel>
+			</State>			
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="humidityStatus">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Humidity Status</TriggerLabel>
+				<ControlPageLabel>Humidity Status</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="Humidity">
+		<Name>Humidity Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="humidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Humidity</TriggerLabel>
+				<ControlPageLabel>Humidity</ControlPageLabel>
+			</State>
+			<State id="minhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity</TriggerLabel>
+				<ControlPageLabel>Min. humidity</ControlPageLabel>
+			</State>
+			<State id="maxhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity</TriggerLabel>
+				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+
+	<Device type="custom" id="UVMeter">
+		<Name>UV Meter</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="Uv">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Uv">UV Level</Option>
+					<Option value="UvMax">UV (Max)</Option>
+					<Option value="UvTemp">UV  / Temp</Option>
+					<Option value="UvMaxTemp">UV (Max) / Temp</Option>
+					<Option value="UvTempMinMax">UV / Temp (Min - Max)</Option>
+					<Option value="UvMaxTempMinMax">UV (Max) / Temp (Min - Max)</Option>					
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="UVLevel">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>UVLevel</TriggerLabel>
+				<ControlPageLabel>UVLevel</ControlPageLabel>
+			</State>
+			<State id="minUVLevel">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. UVLevel</TriggerLabel>
+				<ControlPageLabel>Min. UVLevel</ControlPageLabel>
+			</State>
+			<State id="maxUVLevel">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. UVLevel</TriggerLabel>
+				<ControlPageLabel>Max. UVLevel</ControlPageLabel>
+			</State>
+			<State id="temperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature</TriggerLabel>
+				<ControlPageLabel>Temperature</ControlPageLabel>
+			</State>
+			<State id="mintemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature</TriggerLabel>
+				<ControlPageLabel>Min. temperature</ControlPageLabel>
+			</State>
+			<State id="maxtemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature</TriggerLabel>
+				<ControlPageLabel>Max. temperature</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="ELEC1CurrentSensor">
+		<Name>ELEC1 Current Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="AllAmps">
+				<Label>Display: </Label>
+				<List>
+					<Option value="AmpCh1">Ampere Channel 1</Option>
+					<Option value="AmpCh2">Ampere Channel 2</Option>
+					<Option value="AmpCh3">Ampere Channel 3</Option>
+					<Option value="AllAmps">Amp. Ch. 1/Amp. Ch. 2/Amp. Ch. 3</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="AmpCh1">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Ampere Channel 1</TriggerLabel>
+				<ControlPageLabel>Ampere Channel 1</ControlPageLabel>
+			</State>
+			<State id="AmpCh2">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Ampere Channel 2</TriggerLabel>
+				<ControlPageLabel>Ampere Channel 2</ControlPageLabel>
+			</State>
+			<State id="AmpCh3">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Ampere Channel 3</TriggerLabel>
+				<ControlPageLabel>Ampere Channel 3</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="ELEC2EnergyUsageSensor">
+		<Name>ELEC2 Energy Usage Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="CurrentTotal">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Watts">Current usage (W)</Option>
+					<Option value="kWh">Total (kWh)</Option>
+					<Option value="CurrentTotal">Current usage (W)/Total (kWh)</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="Watts">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Current usage (W)</TriggerLabel>
+				<ControlPageLabel>Current usage (W)</ControlPageLabel>
+			</State>
+			<State id="kWh">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Total (kWh)</TriggerLabel>
+				<ControlPageLabel>ATotal (kWh)</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+
+	<Device type="custom" id="RFXSensor">
+		<Name>RFX Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="Temp">
+				<Label>Display: </Label>
+				<List>
+					<Option value="TempHumid">Temp / Humidity</Option>
+					<Option value="Temp">Temp</Option>
+					<Option value="TempMinMaxHumid">Temp (Min - Max) / Humidity</Option>
+					<Option value="TempMinMax">Temp (Min - Max)</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="temperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature</TriggerLabel>
+				<ControlPageLabel>Temperature</ControlPageLabel>
+			</State>
+			<State id="mintemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature</TriggerLabel>
+				<ControlPageLabel>Min. temperature</ControlPageLabel>
+			</State>
+			<State id="maxtemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature</TriggerLabel>
+				<ControlPageLabel>Max. temperature</ControlPageLabel>
+			</State>
+			<State id="humidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Humidity</TriggerLabel>
+				<ControlPageLabel>Humidity</ControlPageLabel>
+			</State>
+			<State id="minhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity</TriggerLabel>
+				<ControlPageLabel>Min. humidity</ControlPageLabel>
+			</State>
+			<State id="maxhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity</TriggerLabel>
+				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="voltage">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Voltage</TriggerLabel>
+				<ControlPageLabel>Voltage</ControlPageLabel>
+			</State>
+			<State id="message">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Message</TriggerLabel>
+				<ControlPageLabel>Message</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="resetDayValue">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>ResetDayValue</TriggerLabel>
+				<ControlPageLabel>ResetDayValue</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
+
+	<Device type="custom" id="RFXMeter">
+		<Name>RFX Meter</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="countsPerUnit" type="textfield">
+				<Label>Counts per unit:</Label>
+			</Field>			
+			<Field id="unitDescription" type="textfield">
+				<Label>Unit description:</Label>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>daycounter</UiDisplayStateId>
+		<States>
+			<State id="counter">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Counter</TriggerLabel>
+				<ControlPageLabel>Counter</ControlPageLabel>
+			</State>
+			<State id="startofdaycounter">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Start of day counter</TriggerLabel>
+				<ControlPageLabel>Start of day counter</ControlPageLabel>
+			</State>	
+			<State id="daycounter">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Day counter</TriggerLabel>
+				<ControlPageLabel>Day counter</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
+
+	<Device type="custom" id="Rainsensor">
+		<Name>Rain Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="Daily">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Total">Total</Option>
+					<Option value="RainRate">Rain Rate</Option>
+					<Option value="CurrentStatus">Currently Raining?</Option>
+					<Option value="Daily">Running Daily</Option>
+					<Option value="Last7">Running Last 7 Days</Option>
+					<Option value="Weekly">Running Weekly</Option>
+					<Option value="Monthly">Running Monthly</Option>
+					<Option value="DailyCurrentPrevious">Running Daily / Previous Daily Total</Option>
+					<Option value="WeeklyCurrentPrevious">Running Weekly / Previous Weekly Total</Option>
+					<Option value="MonthlyCurrentPrevious">Running Monthly / Previous Monthly Total</Option>
+				</List>
+			</Field>			
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="currentMonthNumber" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="currentWeekNumber" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="last7Days" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+		
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="currentMonthTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Current Month Total</TriggerLabel>
+				<ControlPageLabel>Current Month Total</ControlPageLabel>
+			</State>
+			<State id="previousMonthTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Previous Month Total</TriggerLabel>
+				<ControlPageLabel>Previous Month Total</ControlPageLabel>
+			</State>
+			<State id="currentWeekTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Current Week Total</TriggerLabel>
+				<ControlPageLabel>Current Week Total</ControlPageLabel>
+			</State>
+			<State id="previousWeekTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Previous Week Total</TriggerLabel>
+				<ControlPageLabel>Previous Week Total</ControlPageLabel>
+			</State>
+			<State id="currentDayTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Current Day Total</TriggerLabel>
+				<ControlPageLabel>Current Day Total</ControlPageLabel>
+			</State>
+			<State id="previousDayTotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Previous Day Total</TriggerLabel>
+				<ControlPageLabel>Previous Day Total</ControlPageLabel>
+			</State>			
+			<State id="rainrate">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Rainrate</TriggerLabel>
+				<ControlPageLabel>Rainrate</ControlPageLabel>
+			</State>
+			<State id="raintotal">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Raintotal</TriggerLabel>
+				<ControlPageLabel>Raintotal</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Battery Level</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>	
+	</Device>
+	
+	<Device type="custom" id="ARCSwitch">
+		<Name>ARC Switch (KaKu with wheels)</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>	
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>	
+
+	<Device type="custom" id="X10Switch">
+		<Name>X10 Switch</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>	
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>	
+
+	<Device type="custom" id="ACSwitch">
+		<Name>AC Switch (new KaKu)</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>				
+		</States>
+	</Device>	
+
+	<Device type="custom" id="LWSwitch">
+		<Name>LightWave Switch</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>				
+		</States>
+	</Device>	
+	
+	<Device type="custom" id="LWRemote">
+		<Name>LightWave Remote</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="unit">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Unit</TriggerLabel>
+				<ControlPageLabel>Unit</ControlPageLabel>
+			</State>		
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>				
+		</States>
+	</Device>	
+
+	<Device type="custom" id="PCRemote">
+		<Name>ATI, Medion, PC Remote</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="00">
+				<Label>ID (format FF):</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="commandtype">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Commandtype</TriggerLabel>
+				<ControlPageLabel>Commandtype</ControlPageLabel>
+			</State>
+			<State id="subtype">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Subtype</TriggerLabel>
+				<ControlPageLabel>Subtype</ControlPageLabel>
+			</State>		
+			<State id="toggle">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Toggle</TriggerLabel>
+				<ControlPageLabel>Toggle</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>	
+		</States>
+	</Device>	
+
+	<Device type="custom" id="SecuritySensor">
+		<Name>Security Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>	
+		</ConfigUI>
+		
+		<UiDisplayStateId>status</UiDisplayStateId>
+		<States>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="status">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Status</TriggerLabel>
+				<ControlPageLabel>Status</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>	
+			<State id="lastAlarm">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Alarm detected</TriggerLabel>
+				<ControlPageLabel>Last Alarm detected</ControlPageLabel>
+			</State>			
+		</States>	
+	</Device>
+
+	<Device type="custom" id="WindSensor">
+		<Name>Wind Sensor</Name>
+		<ConfigUI>			
+			<Field id="sensorNumber" type="textfield">
+				<Label>Sensor:</Label>
+			</Field>
+			<Field id="displayField" type="Menu" defaultValue="Speed">
+				<Label>Display: </Label>
+				<List>
+					<Option value="Speed">Speed</Option>
+					<Option value="SpeedDirection">Dir at Speed </Option>
+					<Option value="SpeedCompass">Speed Deg</Option>
+					<Option value="SpeedGust">Speed (Gust)</Option>
+				</List>
+			</Field>			
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>			
+		</ConfigUI>
+
+		<UiDisplayStateId>display</UiDisplayStateId>
+		<States>
+			<State id="display">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Display</TriggerLabel>
+				<ControlPageLabel>Display</ControlPageLabel>
+			</State>			
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>			
+			<State id="avgSpeed">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Average Speed</TriggerLabel>
+				<ControlPageLabel>Average Speed</ControlPageLabel>
+			</State>
+			<State id="gust">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Gust</TriggerLabel>
+				<ControlPageLabel>Gust</ControlPageLabel>
+			</State>			
+			<State id="directionDegrees">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Wind Direction (Degrees)</TriggerLabel>
+				<ControlPageLabel>Wind Direction</ControlPageLabel>
+			</State>
+			<State id="directionText">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Wind Direction (Text)</TriggerLabel>
+				<ControlPageLabel>Wind Direction</ControlPageLabel>
+			</State>
+			<State id="temperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Temperature</TriggerLabel>
+				<ControlPageLabel>Temperature</ControlPageLabel>
+			</State>
+			<State id="windChill">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Wind Chill</TriggerLabel>
+				<ControlPageLabel>Wind Chill</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>
+	</Device>
+
+	<Device type="custom" id="RollerTrolRemote">
+		<Name>RollerTrol Remote</Name>	
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address:</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>	
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>	
+	</Device>		
+	
+	<Device type="custom" id="BlindsRemote">
+		<Name>Blinds Remote</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="A1">
+				<Label>Module Address (format FFFFFFFF):</Label>
+			</Field>
+			<Field id="space0" type="label">
+				<Label></Label>
+			</Field>		
+		</ConfigUI>
+		
+		<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>	
+			<State id="batteryLevel">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Battery Level</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+			<State id="signalStrength">
+				<ValueType>Number</ValueType>
+				<TriggerLabel>Signal Strength</TriggerLabel>
+				<ControlPageLabel>Signal Strength</ControlPageLabel>
+			</State>			
+		</States>	
+	</Device>		
+</Devices>

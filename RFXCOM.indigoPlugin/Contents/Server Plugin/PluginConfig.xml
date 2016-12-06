@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<PluginConfig>
+	<!-- You can add a SupportURL element inside here if you want a context
+		 sensitive help link on the config UI - otherwise it will just link
+		 to the URL specified in the Info.plist. -->
+	<!-- <SupportURL>http://www.frightideas.com</SupportURL> -->
+
+	<Field id="infoLabel" type="label">
+		<Label>RFXCOM Plugin                                   Developed by Robert de Kok</Label>
+	</Field>	
+	<Field id="simpleSeparator1" type="separator"/>
+	
+	<Field type="menu" id="serialPort">
+		<Label>Serial Port:</Label>
+		<List class="indigo.serialPorts" filter="indigo.ignoreBluetooth" />
+	</Field>
+	
+	<Field id="baudRate" type="Menu" defaultValue="38400" hidden="true">
+		<Label>Baudrate: </Label>
+		<List>
+			<Option value="38400">38400</Option>
+		</List>
+	</Field>	
+	
+	<Field id="space1" type="label">
+		<Label></Label>
+	</Field>
+
+	<Field id="simpleSeparator2" type="separator"/>
+
+	<Field id="unitsLabel" type="label">
+		<Label>Display Units</Label>
+	</Field>
+	<Field id="unitsTemperature" type="Menu" defaultValue="C">
+		<Label>Temperature: </Label>
+		<List>
+			<Option value="C">C</Option>
+			<Option value="F">F</Option>
+		</List>
+	</Field>
+	<Field id="unitsRain" type="Menu" defaultValue="mm">
+		<Label>Rainfall: </Label>
+		<List>
+			<Option value="mm">mm</Option>
+			<Option value="in">in</Option>
+		</List>
+	</Field>
+	<Field id="unitsWind" type="Menu" defaultValue="mps">
+		<Label>Wind speed: </Label>
+		<List>
+			<Option value="mps">m/s</Option>
+			<Option value="mph">mph</Option>
+			<Option value="kmph">km/h</Option>
+			<Option value="knots">knots</Option>
+		</List>
+	</Field>		
+
+	<Field id="simpleSeparator3" type="separator"/>
+
+	<Field id="protocolsLabel" type="label">
+		<Label>Enable Receiver Protocols (RFX compatibility varies based on model):</Label>
+	</Field>
+	<Field type="checkbox" id="enableProtocolRFU" defaultValue="true">
+		<Label></Label>
+		<Description>RFU</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolByron" defaultValue="true">
+		<Label></Label>
+		<Description>Byron (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolRSL" defaultValue="true">
+		<Label></Label>
+		<Description>RSL (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolLightning4" defaultValue="true">
+		<Label></Label>
+		<Description>Lightning4 (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolViking" defaultValue="true">
+		<Label></Label>
+		<Description>Viking (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolRubicson" defaultValue="true">
+		<Label></Label>
+		<Description>Rubicson (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolAEBlyss" defaultValue="true">
+		<Label></Label>
+		<Description>AE Blyss (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolBlindsT1234" defaultValue="true">
+		<Label></Label>
+		<Description>Blinds T1,2,3,4 (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolBlindsT0" defaultValue="true">
+		<Label></Label>
+		<Description>Blinds T0 (433.92)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolProGuard" defaultValue="true">
+		<Label></Label>
+		<Description>ProGuard (868.35 MHz FSK)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolFS20" defaultValue="true">
+		<Label></Label>
+		<Description>FS20 (868.35 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolLaCrosse" defaultValue="true">
+		<Label></Label>
+		<Description>La Crosse (433.92 / 868.30 MHz</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolHideki" defaultValue="true">
+		<Label></Label>
+		<Description>Hideki (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolLightwaveRF" defaultValue="true">
+		<Label></Label>
+		<Description>LightwaveRF (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolMertik" defaultValue="true">
+		<Label></Label>
+		<Description>Mertik (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolVisonic" defaultValue="true">
+		<Label></Label>
+		<Description>Visonic (315 / 868.95 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolATI" defaultValue="true">
+		<Label></Label>
+		<Description>ATI (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolOregonScientific" defaultValue="true">
+		<Label></Label>
+		<Description>Oregon Scientific (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolIkeaKoppla" defaultValue="true" hidden="false">
+		<Label></Label>				<!-- transmit only protocol, so hidden from UI -->
+		<Description>Ikea-Koppla (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolHomeEasyEU" defaultValue="true">
+		<Label></Label>
+		<Description>HomeEasy EU (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolAC" defaultValue="true">
+		<Label></Label>
+		<Description>AC (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolARC" defaultValue="true">
+		<Label></Label>
+		<Description>ARC (433.92 MHz)</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolX10" defaultValue="true">
+		<Label></Label>
+		<Description>X10 (310 / 433.92 MHz)</Description>
+	</Field>
+
+	<Field id="simpleSeparator4" type="separator"/>
+
+	<Field type="checkbox" id="unknownAsError">
+		<Label></Label>
+		<Description>Log unknown sensors as error</Description>
+	</Field>
+	<Field type="checkbox" id="enableProtocolUndecoded" defaultValue="true">
+		<Label></Label>
+		<Description>Show undecoded packages in log (Don't keep this option on, as it continuously overwrites your flash memory)</Description>
+	</Field>
+	<Field type="checkbox" id="showDebugInfo">
+		<Label></Label>
+		<Description>Enable debug logging (not recommended)</Description>
+	</Field>
+	<Field id="reinitializebutton" type="button" tooltip="Reset communication with RFXTRX" hidden="true">
+		<Title>Reinitialize receiver</Title>
+		<CallbackMethod>reinitialize</CallbackMethod>
+	</Field>
+
+	<Field id="simpleSeparator5" type="separator"/>
+		
+	<Field type="textfield" id="tstValue" defaultValue="0A5205022F0000325F0359" hidden="false">
+		<Label>Test value:</Label>
+	</Field>
+	<Field id="testbutton" type="button" tooltip="Run the teststring RFXTRX" hidden="false">
+		<Title>Test</Title>
+		<CallbackMethod>inptest</CallbackMethod>
+	</Field>
+	<Field type="textfield" id="flashValue" defaultValue="" hidden="true">
+		<Label>Drag a flashfile in the editor:</Label>
+	</Field>
+	<Field id="flashbutton" type="button" tooltip="Flash your RFXTRX" hidden="true">
+		<Title>Flash</Title>
+		<CallbackMethod>doFlash</CallbackMethod>
+	</Field>	
+
+</PluginConfig>

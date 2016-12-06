@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginVersion</key>
+	<string>2.0.8</string>
+	<key>ServerApiVersion</key>
+	<string>2.0.0</string>
+	<key>IwsApiVersion</key>
+	<string>1.0.0</string>
+	<key>CFBundleDisplayName</key>
+	<string>RFXCOM</string>
+	<key>CFBundleIdentifier</key>
+	<string>nl.rjdekok.indigoplugin.RFXCOM</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>http://bit.ly/KYDQ9c</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!-- If your plugin wants to add actions to the action step dialog that are independent
+	 of a device (devices define their own actions), define them here.
+-->
+<Actions>
+	<Action id="openRollerTrolRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RollerTrol">
+		<Name>Open RollerTrol</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopRollerTrolRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RollerTrol">
+		<Name>Stop RollerTrol</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeRollerTrolRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RollerTrol">
+		<Name>Close RollerTrol</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programRollerTrolRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RollerTrol">
+		<Name>Program RollerTrol</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>
+	<Action id="limitRollerTrolRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RollerTrol">
+		<Name>Limit RollerTrol</Name>
+		<CallbackMethod>limitRelay</CallbackMethod>
+	</Action>
+	
+	<Action id="openBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
+		<Name>Open Brel</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
+		<Name>Stop Brel</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
+		<Name>Close Brel</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
+		<Name>Program Brel</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>
+	<Action id="limitBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
+		<Name>Limit Brel</Name>
+		<CallbackMethod>limitRelay</CallbackMethod>
+	</Action>	
+	
+	<Action id="openHarrison" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Harrison">
+		<Name>Open Harrison</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopHarrison" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Harrison">
+		<Name>Stop Harrison</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeHarrison" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Harrison">
+		<Name>Close Harrison</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programHarrison" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Harrison">
+		<Name>Program Harrison</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>
+	
+	<Action id="openSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Open Somfy</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="closeSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Close Somfy</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+		
+	<Action id="stopSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Stop Somfy</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="programSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Program Somfy</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>	
+	
+	<Action id="UpSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Up Somfy</Name>
+		<CallbackMethod>UpRelay</CallbackMethod>
+	</Action>	
+	<Action id="DownSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Down Somfy</Name>
+		<CallbackMethod>DownRelay</CallbackMethod>
+	</Action>
+	<Action id="AnglePlusSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Angle+ Somfy</Name>
+		<CallbackMethod>AnglePlusRelay</CallbackMethod>
+	</Action>	
+	<Action id="AngleMinSomfyRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Somfy">
+		<Name>Angle- Somfy</Name>
+		<CallbackMethod>AngleMinRelay</CallbackMethod>
+	</Action>	
+	
+	<Action id="UpMertik" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Mertik">
+		<Name>Up Mertik</Name>
+		<CallbackMethod>UpRelay</CallbackMethod>
+	</Action>	
+	<Action id="DownMertik" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Mertik">
+		<Name>Down Mertik</Name>
+		<CallbackMethod>DownRelay</CallbackMethod>
+	</Action>
+	<Action id="RunUpMertik" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Mertik">
+		<Name>Run Up Mertik/2nd Off</Name>
+		<CallbackMethod>RunUpRelay</CallbackMethod>
+	</Action>	
+	<Action id="RunDownMertik" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Mertik">
+		<Name>Run Down Mertik/2nd On</Name>
+		<CallbackMethod>RunDownRelay</CallbackMethod>
+	</Action>
+	<Action id="StopMertik" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Mertik">
+		<Name>Stop Mertik/2nd On</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+
+	<Action id="colorPlus" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RGBDimmer">
+		<Name>Color +</Name>
+		<CallbackMethod>colorPlus</CallbackMethod>
+	</Action>	
+	<Action id="colorMin" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.RGBDimmer">
+		<Name>Color -</Name>
+		<CallbackMethod>colorMin</CallbackMethod>
+	</Action>	
+
+ </Actions>
