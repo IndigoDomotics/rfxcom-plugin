@@ -1228,9 +1228,11 @@ class RFXTRX(object):
 								
 				self.calcMinMax(sensor,"temperature")
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._finalizeStatesChanges()
 
 				if (self.tempList[sensor].states["temperature"]==self.tempList[sensor].states["mintemperature"]) and (self.tempList[sensor].states["temperature"]==self.tempList[sensor].states["maxtemperature"]):
 					self._addToBatchStatesChange(self.tempList[sensor], key=u"resetDayValue", value=1)
+					self._finalizeStatesChanges()
 				
 			if subtype == 1:
 				svalue = (ord(data[5])*256)+ord(data[6])
@@ -1240,17 +1242,20 @@ class RFXTRX(object):
 				svalue = ((svalue/4.75*1) / (1.0305 + (5.5E-6 * tempture) - (1.375E-7 * tempture * tempture)))
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=round(svalue,2))
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"message", value="")
+				self._finalizeStatesChanges()
 				
 				if self.tempList[sensor].states["resetDayValue"]==1:
 					self._addToBatchStatesChange(self.tempList[sensor], key=u"minhumidity", value=round(svalue,2))
 					self._addToBatchStatesChange(self.tempList[sensor], key=u"maxhumidity", value=round(svalue,2))
 					self._addToBatchStatesChange(self.tempList[sensor], key=u"resetDayValue", value=0)
+					self._finalizeStatesChanges()
 
 			if subtype == 2:
 				svalue = (ord(data[5])*256)+ord(data[6])
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"voltage", value=svalue)
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"message", value="")
-								
+				self._finalizeStatesChanges()
+
 			if subtype == 3:
 				svalue = (ord(data[5])*256)+ord(data[6])
 				if svalue == 1:
@@ -1270,6 +1275,7 @@ class RFXTRX(object):
 				else:
 					str = "Message unknown"
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"message", value=str)
+				self._finalizeStatesChanges()
 
 			if (subtype==0) or (subtype==1):
 				self.plugin.debugLog(u"Setting display value to %s, temp=%s" % (self.tempList[sensor].pluginProps["displayField"],self.tempList[sensor].states["temperature"]))	
@@ -1320,9 +1326,10 @@ class RFXTRX(object):
 				except:
 					dayvalue = -1
 
-				self.tempList[sensor].updateStateOnServer(key=u"counter", value=thisValue)
-				self.tempList[sensor].updateStateOnServer(key=u"daycounter", value= '%.2f%s' % (dayvalue,uDesc))
-				self.tempList[sensor].updateStateOnServer(key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"counter", value=thisValue)
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"daycounter", value= '%.2f %s' % (dayvalue,uDesc))
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._finalizeStatesChanges()
 
 			if subtype == 99: #Moet gewoon type 0 zijn, gedisabled door RdK ivm problemen met update van de daycounter, bovenstaande subtype 0 is de oude versie. John testen!
 				thisValue = (ord(data[6])*256*256*256)+(ord(data[7])*256*256)+(ord(data[8])*256)+ord(data[9])
@@ -1387,6 +1394,7 @@ class RFXTRX(object):
 			self.calcMinMax(sensor,"temperature")
 			self.calcMinMax(sensor,"humidity")
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._finalizeStatesChanges()
 			
 			display = "--"
 			displayMode = self.tempList[sensor].pluginProps["displayField"]
@@ -1534,6 +1542,7 @@ class RFXTRX(object):
 			self.calcMinMax(sensor,"humidity")
 			self.calcMinMax(sensor,"barometer")
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._finalizeStatesChanges()
 			
 			display = "--"
 			displayMode = self.tempList[sensor].pluginProps["displayField"]
@@ -1692,6 +1701,7 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)			
 			self.calcMinMax(sensor,"UVLevel")
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._finalizeStatesChanges()
 			
 			display = "--"
 			displayMode = self.tempList[sensor].pluginProps["displayField"]
