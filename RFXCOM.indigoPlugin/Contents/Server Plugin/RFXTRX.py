@@ -40,16 +40,18 @@ class RFXTRX(object):
 		if len(self.batchStatesUpdate) == 0:
 			return
 		for devId in self.batchStatesUpdate:
-			dev = indigo.devices[devId]
-			dev.updateStatesOnServer(self.batchStatesUpdate[devId])
+			(dev, updateList) = self.batchStatesUpdate[devId]
+			dev.updateStatesOnServer(updateList)
 		self.batchStatesUpdate = {}
 		return
 
 	def _addToBatchStatesChange(self, dev, key="", value=""):
 		devId = dev.id
 		if devId not in self.batchStatesUpdate:
-			self.batchStatesUpdate[devId] = []
-		self.batchStatesUpdate[devId].append({"key":key, "value":value})
+			self.batchStatesUpdate[devId] = (dev, [{"key":key, "value":value}])
+		else:
+			(unused, updateList) = self.batchStatesUpdate[devId]
+			updateList.append({"key":key, "value":value})
 		return
 
 	########################################
@@ -1189,10 +1191,13 @@ class RFXTRX(object):
 			elif displayMode == "Monthly":
 				display = "%.2f" % (currentMonthTotal)
 			elif displayMode == "DailyCurrentPrevious":
+				self._finalizeStatesChanges()
 				display = "%.2f / %.2f" % (currentDayTotal, self.tempList[sensor].states["previousDayTotal"])
 			elif displayMode == "WeeklyCurrentPrevious":
+				self._finalizeStatesChanges()
 				display = "%.2f / %.2f" % (currentWeekTotal, self.tempList[sensor].states["previousWeekTotal"])
 			elif displayMode == "MonthlyCurrentPrevious":
+				self._finalizeStatesChanges()
 				display = "%.2f / %.2f" % (currentMonthTotal, self.tempList[sensor].states["previousMonthTotal"])
 				
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)
@@ -1225,11 +1230,12 @@ class RFXTRX(object):
 				temp = self.convertTemperatureToUnit(temp)
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value= '%.1f' % (temp))
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"message", value="")
-								
-				self.calcMinMax(sensor,"temperature")
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 				self._finalizeStatesChanges()
 
+				self.calcMinMax(sensor,"temperature")
+
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._finalizeStatesChanges()
 				if (self.tempList[sensor].states["temperature"]==self.tempList[sensor].states["mintemperature"]) and (self.tempList[sensor].states["temperature"]==self.tempList[sensor].states["maxtemperature"]):
 					self._addToBatchStatesChange(self.tempList[sensor], key=u"resetDayValue", value=1)
 					self._finalizeStatesChanges()
@@ -1391,8 +1397,11 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._finalizeStatesChanges()
+
 			self.calcMinMax(sensor,"temperature")
 			self.calcMinMax(sensor,"humidity")
+
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._finalizeStatesChanges()
 			
@@ -1538,9 +1547,12 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._finalizeStatesChanges()
+
 			self.calcMinMax(sensor,"temperature")
 			self.calcMinMax(sensor,"humidity")
 			self.calcMinMax(sensor,"barometer")
+
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._finalizeStatesChanges()
 			
@@ -1658,7 +1670,10 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._finalizeStatesChanges()
+
 			self.calcMinMax(sensor,"humidity")
+
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=u"%d%%" % humid)
 			self._finalizeStatesChanges()
@@ -1692,6 +1707,8 @@ class RFXTRX(object):
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 			if subtype==3:
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value=temp)
+				self._finalizeStatesChanges()
+
 				self.calcMinMax(sensor,"temperature")
 			else:
 				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value="")
@@ -1699,7 +1716,10 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)			
+			self._finalizeStatesChanges()
+
 			self.calcMinMax(sensor,"UVLevel")
+
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._finalizeStatesChanges()
 			
@@ -1884,11 +1904,14 @@ class RFXTRX(object):
 			if self.checkIfNewDay(sensor):
 				self._addToBatchStatesChange(self.tempList[sensor], key=minstateName, value=lastValue)
 				self._addToBatchStatesChange(self.tempList[sensor], key=maxstateName, value=lastValue)
+				self._finalizeStatesChanges()
 			else:
 				if (float(lastValue) < float(self.tempList[sensor].states[minstateName])):
 					self._addToBatchStatesChange(self.tempList[sensor], key=minstateName, value=lastValue)
+					self._finalizeStatesChanges()
 				if (float(lastValue) > float(self.tempList[sensor].states[maxstateName])):
 					self._addToBatchStatesChange(self.tempList[sensor], key=maxstateName, value=lastValue)
+					self._finalizeStatesChanges()
 		except:
 			self.plugin.debugLog(u"An error occured while setting the min/max values")
 			exc_type, exc_value, exc_traceback = sys.exc_info()		
