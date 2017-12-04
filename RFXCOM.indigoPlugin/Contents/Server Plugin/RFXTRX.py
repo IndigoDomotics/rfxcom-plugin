@@ -1387,14 +1387,14 @@ class RFXTRX(object):
 		
 		sensor = (ord(data[5])*256)+ord(data[4])
 		self.plugin.debugLog(u"Temp sensor %d now %.2f degrees and %d humidity." % (sensor,temp,humid))
-		
-		if self.tempList[sensor].pluginProps['MultiplyBatteryLevel']:
-			batteryLevel *= 10
-			if batteryLevel > 100:
-				batteryLevel = 100			
 				
 		if sensor in self.tempList.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
+			
+			if self.tempList[sensor].pluginProps['MultiplyBatteryLevel']:
+				batteryLevel *= 10
+				if batteryLevel > 100:
+					batteryLevel = 100	
 
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value= '%.1f' % (temp)) 
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid)
