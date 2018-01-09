@@ -280,9 +280,18 @@
 		</States>
 	</Device>	
 	
-	<Device type="custom" id="Temperature">
+	<Device type="sensor" id="Temperature">
 		<Name>Temperature Sensor</Name>
-		<ConfigUI>			
+		<ConfigUI>
+            <Field type="checkbox" id="SupportsBatteryLevel" hidden="true" defaultValue="true"/>
+            <Field type="checkbox" id="SupportsSensorValue"  hidden="true" defaultValue="true"/>
+            <Field type="checkbox" id="SupportsOnState"  hidden="true" defaultValue="false"/>
+			<Field id="subModel" type="textfield" hidden="true" defaultValue="Temperature">
+				<Label>Optional Sub Model Name :</Label>
+			</Field>	
+			<Field id="SupportsStatusRequest" type="checkbox" hidden="true" defaultValue="false">
+				<Label>Enable status request / refresh button:</Label>
+			</Field>	
 			<Field id="sensorNumber" type="textfield">
 				<Label>Sensor:</Label>
 			</Field>
@@ -300,7 +309,23 @@
 			</Field>
 			<Field id="address" type="textfield" hidden="true">
 				<Label/>
-			</Field>			
+			</Field>
+			<Field id="sensorValueType" type="Menu" defaultValue="Temp">
+				<Label>Sensor Value:</Label>
+				<List>
+					<Option value="Temp">Temperature</Option>
+					<Option value="Humid">Humidity</Option>
+				</List>
+			</Field>
+			<Field id="sensorValueLabel" type="label" alignWithControl="true" fontSize="small" fontColor="darkgray">
+				<Label>Only one value can be used as Indigo sensor value, please choose which will be used. Displayed value will still be as chosen above</Label>
+			</Field>
+			<Field id="MultiplyBatteryLevel" type="checkbox" defaultValue="false">
+				<Label>Battery Level * 10:</Label>
+			</Field>
+			<Field id="batteryLabel" type="label" alignWithControl="true" fontSize="small" fontColor="darkgray">
+				<Label>Some sensors report battery level 10 as "normal", battery level 1 as "replace battery". In that case, battery level can be multipled with 10.</Label>
+			</Field>		
 		</ConfigUI>
 
 		<UiDisplayStateId>display</UiDisplayStateId>
@@ -367,7 +392,7 @@
 			</State>			
 		</States>
 	</Device>
-
+	
 	<Device type="custom" id="Doorbell">
 		<Name>Doorbell</Name>
 		<ConfigUI>			

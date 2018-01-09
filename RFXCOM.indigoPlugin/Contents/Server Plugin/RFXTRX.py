@@ -45,13 +45,13 @@ class RFXTRX(object):
 		self.batchStatesUpdate = {}
 		return
 
-	def _addToBatchStatesChange(self, dev, key="", value=""):
+	def _addToBatchStatesChange(self, dev, key="", value="", uiValue=None):
 		devId = dev.id
 		if devId not in self.batchStatesUpdate:
-			self.batchStatesUpdate[devId] = (dev, [{"key":key, "value":value}])
+			self.batchStatesUpdate[devId] = (dev, [{"key":key, "value":value, "uiValue":uiValue}])
 		else:
 			(unused, updateList) = self.batchStatesUpdate[devId]
-			updateList.append({"key":key, "value":value})
+			updateList.append({"key":key, "value":value, "uiValue":uiValue})
 		return
 
 	########################################
@@ -1383,12 +1383,18 @@ class RFXTRX(object):
 			batteryAndSignalData = data[10]
 
 		batteryLevel = self.getBatteryLevel(batteryAndSignalData)
-		signalStrength = self.getSignalStrength(batteryAndSignalData)			
+		signalStrength = self.getSignalStrength(batteryAndSignalData)
 		
 		sensor = (ord(data[5])*256)+ord(data[4])
 		self.plugin.debugLog(u"Temp sensor %d now %.2f degrees and %d humidity." % (sensor,temp,humid))
+				
 		if sensor in self.tempList.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
+			
+			if self.tempList[sensor].pluginProps['MultiplyBatteryLevel']:
+				batteryLevel *= 10
+				if batteryLevel > 100:
+					batteryLevel = 100	
 
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value= '%.1f' % (temp)) 
 			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid)
@@ -1408,15 +1414,20 @@ class RFXTRX(object):
 			display = "--"
 			displayMode = self.tempList[sensor].pluginProps["displayField"]
 			if displayMode == "TempHumid":
-				display = "%.1f %s / %d%%" % (temp, self.plugin.unitsTemperature, humid)
+				display = u"%.1f °%s / %d%%" % (temp, self.plugin.unitsTemperature, humid)
 			elif displayMode == "Temp":
-				display = "%.1f %s" % (temp, self.plugin.unitsTemperature)
+				display = u"%.1f °%s" % (temp, self.plugin.unitsTemperature)
 			elif displayMode == "TempMinMaxHumid":
-				display = "%.1f %s (%.1f-%.1f) %d%%" % (temp, self.plugin.unitsTemperature, self.tempList[sensor].states["mintemperature"], self.tempList[sensor].states["maxtemperature"], humid)
+				display = u"%.1f °%s (%.1f-%.1f) %d%%" % (temp, self.plugin.unitsTemperature, self.tempList[sensor].states["mintemperature"], self.tempList[sensor].states["maxtemperature"], humid)
 			elif displayMode == "TempMinMax":
-				display = "%.1f %s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self.tempList[sensor].states["mintemperature"], self.tempList[sensor].states["maxtemperature"])
+				display = u"%.1f °%s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self.tempList[sensor].states["mintemperature"], self.tempList[sensor].states["maxtemperature"])
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)
+			if self.tempList[sensor].pluginProps["sensorValueType"] == "Humid":
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"sensorValue", value='%.1f' % (humid), uiValue=display)
+			else: #Temperature
+				self._addToBatchStatesChange(self.tempList[sensor], key=u"sensorValue", value='%.1f' % (temp), uiValue=display)
+				
+			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display, uiValue=display)
 			self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -2128,6 +2139,9 @@ class RFXTRX(object):
 	# Device Start / Stop Subs
 	def deviceStart(self, dev):
 		self.plugin.debugLog(u"deviceStart called. Adding device %s, type: %s" % (dev.name,dev.deviceTypeId))
+		
+		needToSavePlugInProps = False
+		localProps = dev.pluginProps
 
 		if dev.deviceTypeId == u'Doorbell':
 			sensor = int(dev.pluginProps['sensorNumber'])
@@ -2146,7 +2160,49 @@ class RFXTRX(object):
 			self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
-
+			# Below could be better implemented to avoid the risk of infinite loops (replacePluginPropsOnServer calls deviceStartComm). Believe however that it loops only once as all values are set and defaulted.
+			if "MultiplyBatteryLevel" not in localProps:
+				self.plugin.debugLog(u'Adding MultiplyBatteryLevel to plugin props')
+				localProps['MultiplyBatteryLevel'] = False
+				needToSavePlugInProps = True
+			if "sensorValueType" not in localProps:
+				self.plugin.debugLog(u'Adding sensorValueType to plugin props')
+				localProps['sensorValueType'] = 'Temp'
+				needToSavePlugInProps = True
+			if 'SupportsStatusRequest' not in localProps:
+				self.plugin.debugLog(u'Adding SupportsStatusRequest to plugin props')
+				localProps['SupportsStatusRequest'] = False
+				needToSavePlugInProps = True
+			else:
+				if localProps['SupportsStatusRequest'] == True:
+					localProps['SupportsStatusRequest'] = False
+					needToSavePlugInProps = True
+			if 'SupportsSensorValue' not in localProps:
+				self.plugin.debugLog(u'Adding SupportsSensorValue to plugin props')
+				localProps['SupportsSensorValue'] = True
+				needToSavePlugInProps = True
+			else:
+				if localProps['SupportsSensorValue'] == False:
+					localProps['SupportsSensorValue'] = True
+					needToSavePlugInProps = True
+			if 'SupportsOnState' not in localProps:
+				self.plugin.debugLog(u'Adding SupportsOnState to plugin props')
+				localProps['SupportsOnState'] = False
+				needToSavePlugInProps = True
+			else:
+				if localProps['SupportsOnState'] == False:
+					localProps['SupportsOnState'] = False
+					needToSavePlugInProps = True
+			if 'subModel' not in localProps:
+				self.plugin.debugLog(u'Adding subModel to plugin props')
+				localProps['subModel'] = 'Temperature'
+				needToSavePlugInProps = True
+			else:
+				if localProps['subModel'] != 'Temperature':
+					localProps['subModel'] = 'Temperature'
+					needToSavePlugInProps = True
+			dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+					
 		if dev.deviceTypeId == u'Humidity':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			self.plugin.debugLog(u"Adding sensor %s." % sensor)
@@ -2263,12 +2319,19 @@ class RFXTRX(object):
 			sensor = int(dev.pluginProps['sensorNumber'])
 			self.plugin.debugLog(u"Adding Wind Sensor %s." % sensor)
 			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev				
+				self.tempList[sensor] = dev	
+				
+		if needToSavePlugInProps:
+			self.plugin.debugLog(u'Updating plugin props, Sensor %s' % sensor)
+			dev.replacePluginPropsOnServer(localProps)		
 
 	def deviceStop(self, dev):
 		try:
 			sensor = int(dev.pluginProps['sensorNumber'])
 			del self.tempList[sensor]
+			if dev.deviceTypeId == u'Temperature':
+				dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
+			
 			self.plugin.debugLog(u"deviceStop called. Removed device %s." % dev.name)	
 		except:
 			self.plugin.debugLog(u"deviceStop called. Device %s not found in list." % dev.name)	
