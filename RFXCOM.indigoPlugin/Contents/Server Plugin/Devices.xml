@@ -98,6 +98,34 @@
 		<States>
 		</States>
 	</Device>
+	
+	<Device type="relay" id="A-OK_RF01">
+		<Name>A-OK_RF01</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>
+	
+	<Device type="relay" id="A-OK_AC114">
+		<Name>A-OK_AC114</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode (format 1-16):</Label>
+			</Field>
+		</ConfigUI>
+		<States>
+		</States>
+	</Device>		
 
 	<Device type="relay" id="Brel">
 		<Name>Brel</Name>

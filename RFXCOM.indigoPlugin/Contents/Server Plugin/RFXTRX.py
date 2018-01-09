@@ -268,6 +268,10 @@ class RFXTRX(object):
 			return 0x00
 		elif dev.deviceTypeId == 'RollerTrol':
 			return 0x00		
+		elif dev.deviceTypeId == 'A-OK_RF01':
+			return 0x02	
+		elif dev.deviceTypeId == 'A-OK_AC114':
+			return 0x03								
 		elif dev.deviceTypeId == 'Brel':
 			return 0x06					
 		elif dev.deviceTypeId == 'Somfy':
@@ -392,7 +396,7 @@ class RFXTRX(object):
 					level=int(round(BrightLevel/3.23))
 					self.plugin.debugLog("device level:%s" % (level))
 					packdata = chr(0x14)+devtype+chr(0x00)+chr(adres1)+chr(adres2)+chr(adres3)+housecode+commcode+chr(level)+chr(0x70)
-				elif (dev.deviceTypeId=="RollerTrol")  or (dev.deviceTypeId=="Brel") :
+				elif (dev.deviceTypeId=="RollerTrol")  or (dev.deviceTypeId=="Brel")  or (dev.deviceTypeId=="A-OK_RF01")  or (dev.deviceTypeId=="A-OK_AC114"):
 					adres1 = int(dev.pluginProps['address'][0:2],16)
 					adres2 = int(dev.pluginProps['address'][2:4],16)
 					adres3 = int(dev.pluginProps['address'][4:6],16)

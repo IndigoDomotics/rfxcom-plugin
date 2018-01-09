@@ -18,6 +18,14 @@
 		<Name>Stop RollerTrol...</Name>
 		<ConfigUI actionId="stopRollerTrolRelay"/>
 	</MenuItem>
+	<MenuItem id="stopA-OK_RF01">
+		<Name>Stop A-OK_RF01...</Name>
+		<ConfigUI actionId="stopA-OK_RF01Relay"/>
+	</MenuItem>
+	<MenuItem id="stopA-OK_AC114">
+		<Name>Stop A-OK_AC114...</Name>
+		<ConfigUI actionId="stopA-OK_AC114Relay"/>
+	</MenuItem>		
 	<MenuItem id="programBrel">
 		<Name>Program Brel...</Name>
 		<ConfigUI actionId="programBrelRelay"/>
