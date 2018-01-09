@@ -24,6 +24,40 @@
 		<CallbackMethod>limitRelay</CallbackMethod>
 	</Action>
 	
+	<Action id="openA-OK_RF01Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_RF01">
+		<Name>Open A-OK_RF01</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopA-OK_RF01Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_RF01">
+		<Name>Stop A-OK_RF01</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeA-OK_RF01Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_RF01">
+		<Name>Close A-OK_RF01</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programA-OK_RF01Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_RF01">
+		<Name>Program A-OK_RF01</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>	
+	
+	<Action id="openA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
+		<Name>Open A-OK_AC114</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
+		<Name>Stop A-OK_AC114</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
+		<Name>Close A-OK_AC114</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
+		<Name>Program A-OK_AC114</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>	
+	
 	<Action id="openBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
 		<Name>Open Brel</Name>
 		<CallbackMethod>openRelay</CallbackMethod>
