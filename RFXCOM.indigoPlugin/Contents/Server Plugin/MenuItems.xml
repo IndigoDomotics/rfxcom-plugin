@@ -62,5 +62,17 @@
 		<Name>Stop Mertik..</Name>
 		<ConfigUI actionId="StopMertik"/>
 	</MenuItem>			
+    <MenuItem id="resetDevice">
+        <Name>Reset device</Name>
+        <ConfigUI>
+            <Field     id="selectedDevice" type="menu" defaultValue="0">
+                <Label>select Unifi-CLient device:</Label>
+                <List class="self" filter="" method="filterdevices"  dynamicReload="no"/>
+            </Field>
+            <Field    id="confirmDevice" type="button" tooltip="" >
+                <Label>Click to RESET</Label><Title>EXECUTE</Title> <CallbackMethod>buttonConfirmRESETCALLBACK</CallbackMethod>
+            </Field>
+        </ConfigUI>
+    </MenuItem>
 			
 </MenuItems>

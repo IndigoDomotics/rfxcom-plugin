@@ -378,6 +378,16 @@
 				<TriggerLabel>Max. temperature</TriggerLabel>
 				<ControlPageLabel>Max. temperature</ControlPageLabel>
 			</State>
+			<State id="minYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Min. temperature yesterday</ControlPageLabel>
+			</State>
+			<State id="maxYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Max. temperature yesterday</ControlPageLabel>
+			</State>
 			<State id="humidity">
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Humidity</TriggerLabel>
@@ -392,6 +402,16 @@
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Max. humidity</TriggerLabel>
 				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="maxYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Max. humidity yesterday</ControlPageLabel>
+			</State>
+			<State id="minYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Min. humidity yesterday</ControlPageLabel>
 			</State>
 			<State id="type">
 				<ValueType>Integer</ValueType>
@@ -575,6 +595,16 @@
 				<TriggerLabel>Max. temperature</TriggerLabel>
 				<ControlPageLabel>Max. temperature</ControlPageLabel>
 			</State>
+			<State id="minYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Min. temperature yesterday</ControlPageLabel>
+			</State>
+			<State id="maxYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Max. temperature yesterday</ControlPageLabel>
+			</State>
 			<State id="humidity">
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Humidity</TriggerLabel>
@@ -589,6 +619,16 @@
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Max. humidity</TriggerLabel>
 				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="maxYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Max. humidity yesterday</ControlPageLabel>
+			</State>
+			<State id="minYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Min. humidity yesterday</ControlPageLabel>
 			</State>
 			<State id="barometer">
 				<ValueType>Integer</ValueType>
@@ -673,6 +713,16 @@
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Max. humidity</TriggerLabel>
 				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="maxYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Max. humidity yesterday</ControlPageLabel>
+			</State>
+			<State id="minYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Min. humidity yesterday</ControlPageLabel>
 			</State>
 			<State id="type">
 				<ValueType>Integer</ValueType>
@@ -759,6 +809,16 @@
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Max. temperature</TriggerLabel>
 				<ControlPageLabel>Max. temperature</ControlPageLabel>
+			</State>
+			<State id="minYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Min. temperature yesterday</ControlPageLabel>
+			</State>
+			<State id="maxYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Max. temperature yesterday</ControlPageLabel>
 			</State>
 			<State id="type">
 				<ValueType>Integer</ValueType>
@@ -949,6 +1009,16 @@
 				<TriggerLabel>Max. temperature</TriggerLabel>
 				<ControlPageLabel>Max. temperature</ControlPageLabel>
 			</State>
+			<State id="minYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Min. temperature yesterday</ControlPageLabel>
+			</State>
+			<State id="maxYesterdaytemperature">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. temperature yesterday</TriggerLabel>
+				<ControlPageLabel>Max. temperature yesterday</ControlPageLabel>
+			</State>
 			<State id="humidity">
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Humidity</TriggerLabel>
@@ -963,6 +1033,16 @@
 				<ValueType>Integer</ValueType>
 				<TriggerLabel>Max. humidity</TriggerLabel>
 				<ControlPageLabel>Max. humidity</ControlPageLabel>
+			</State>
+			<State id="maxYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Max. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Max. humidity yesterday</ControlPageLabel>
+			</State>
+			<State id="minYesterdayhumidity">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Min. humidity yesterday</TriggerLabel>
+				<ControlPageLabel>Min. humidity yesterday</ControlPageLabel>
 			</State>
 			<State id="voltage">
 				<ValueType>Integer</ValueType>
