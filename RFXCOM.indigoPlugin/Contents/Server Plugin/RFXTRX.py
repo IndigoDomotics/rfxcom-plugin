@@ -1416,7 +1416,7 @@ class RFXTRX(object):
 			if subtype == 0:
 				thisValue = (ord(data[6])*256*256*256)+(ord(data[7])*256*256)+(ord(data[8])*256)+ord(data[9])
 				if self.checkIfNewDay(sensor):
-					self.tempList[sensor].updateStateOnServer(key=u"startofdaycounter", value=thisValue)
+					self._addToBatchStatesChange(self.tempList[sensor], key=u"startofdaycounter", value=thisValue)
 
 				lastValue = self._getCurrentSensorValue(self.tempList[sensor],"startofdaycounter")
 				try:
@@ -2255,24 +2255,27 @@ class RFXTRX(object):
 
 		if dev.deviceTypeId == u'Doorbell':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'BBQ':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'Temperature':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2321,21 +2324,24 @@ class RFXTRX(object):
 			dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
 		elif dev.deviceTypeId == u'Humidity':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'Barometer':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'Rainsensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2343,8 +2349,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'ARCSwitch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
-			if not force: self.plugin.debugLog(u"Adding ARC Switch (KaKu with wheels) %s (%s)." % (adres,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding ARC Switch (KaKu with wheels) %s (%s)." % (adres,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2352,8 +2359,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'RollerTrolRemote':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
-			if not force: self.plugin.debugLog(u"Adding RollerTrol Remote %s (%s)." % (adres,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding RollerTrol Remote %s (%s)." % (adres,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2361,8 +2369,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'BlindsRemote':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
-			if not force: self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2370,8 +2379,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'X10Switch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
-			if not force: self.plugin.debugLog(u"Adding X10 Switch %s (%s)." % (adres,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding X10 Switch %s (%s)." % (adres,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2380,8 +2390,9 @@ class RFXTRX(object):
 			adres = dev.pluginProps['address']
 			unitcode =str(100+int(dev.pluginProps['unit']))[1:3]
 			sensor = adres+unitcode
-			if not force: self.plugin.debugLog(u"Adding AC Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding AC Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2390,8 +2401,9 @@ class RFXTRX(object):
 			adres = dev.pluginProps['address']
 			unitcode =str(100+int(dev.pluginProps['unit']))[1:3]
 			sensor = adres+unitcode
-			if not force: self.plugin.debugLog(u"Adding LightWave Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding LightWave Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2399,8 +2411,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'LWRemote':
 			adres = dev.pluginProps['address']
 			sensor = adres
-			if not force: self.plugin.debugLog(u"Adding LightWave Remote housecode %s (%s)." % (adres,sensor))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding LightWave Remote housecode %s (%s)." % (adres,sensor))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
@@ -2408,64 +2421,72 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == u'PCRemote':
 			adres = dev.pluginProps['address']
 			sensor = adres
-			if not force: self.plugin.debugLog(u"Adding PCRemote %s." % (adres))			
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding PCRemote %s." % (adres))			
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'SecuritySensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'RFXSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding RFXSensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding RFXSensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'RFXMeter':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding RFXMeter %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding RFXMeter %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'UVMeter':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding UV Meter %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding UV Meter %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'ELEC1CurrentSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding ELEC1 Current Sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding ELEC1 Current Sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'ELEC2EnergyUsageSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding ELEC2 Energy Usage Sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding ELEC2 Energy Usage Sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
 				self.tempList[sensor] = dev
 		elif dev.deviceTypeId == u'WindSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
-			if not force: self.plugin.debugLog(u"Adding Wind Sensor %s." % sensor)
-			if force:
+			if not force:
+				self.plugin.debugLog(u"Adding Wind Sensor %s." % sensor)
+			else:
 				del self.tempList[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.tempList.keys():
