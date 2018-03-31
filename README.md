@@ -35,7 +35,7 @@ Plugin ID
 
 Here's the plugin ID in case you need to programmatically restart the plugin:
 
-**Plugin ID**: com.indigodomo.opensource.isybridge
+**Plugin ID**: nl.rjdekok.indigoplugin.RFXCOM
 
 Contributing
 ------------
