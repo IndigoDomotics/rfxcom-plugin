@@ -26,7 +26,7 @@ class RFXTRX(object):
 		self.shutdown = False
 		self.configRead = False
 		self.port = None
-		self.tempList = {}		
+		self.valuesList = {}		
 		self.batchStatesUpdate = {}
 		self.sensorValues = {}
 		self.pluginState = "init"
@@ -288,16 +288,16 @@ class RFXTRX(object):
 ################ reset rain sensor device
 	def filterdevices(self):
 		list = []
-		for sensor in self.tempList:
-			dev =  indigo.devices[self.tempList[sensor]]
+		for sensor in self.valuesList:
+			dev =  indigo.devices[self.valuesList[sensor]]
 			if not dev.deviceTypeId == u'Rainsensor':   continue
 			list.append([ str(dev.id)+"-"+str(sensor),dev.name ])
 		return sorted(list, key=lambda x: x[1])
 		
 	def ResetDevice(self,devId):
 		sensor = int(devId.split("-")[1])
-		if sensor in self.tempList:
-			dev = indigo.devices[int(self.tempList[sensor].id)]
+		if sensor in self.valuesList:
+			dev = indigo.devices[int(self.valuesList[sensor].id)]
 			# set states to 0
 			self._addToBatchStatesChange(dev, key=u"rainrate", value=0,decimalPlaces=2)
 			self._addToBatchStatesChange(dev, key=u"raintotal", value=0,decimalPlaces=2)
@@ -317,7 +317,7 @@ class RFXTRX(object):
 			localProps["currentMonthNumber"] = 0
 			localProps["currentWeekNumber"] = 0
 			dev.replacePluginPropsOnServer(localProps)			
-			self.tempList[sensor] = indigo.devices[self.tempList[sensor].id]
+			self.valuesList[sensor] = indigo.devices[self.valuesList[sensor].id]
 		return 
 ################ reset rain sensor device  END
 
@@ -872,13 +872,13 @@ class RFXTRX(object):
 			stattext = "Undefined"
 		
 		self.plugin.debugLog(u"Security sensor %d of type %s (%s) has status %s (%s)" % (sensor, subtype, device, status, stattext))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Security sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=int(subtype))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"status", value=int(status))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))		
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=int(subtype))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"status", value=int(status))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))		
 			if int(status)==2 or int(status)==4 or int(status)==84:
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastAlarm", value=time.strftime('%Y/%m/%d %H:%M:%S'))	
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastAlarm", value=time.strftime('%Y/%m/%d %H:%M:%S'))	
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -906,11 +906,11 @@ class RFXTRX(object):
 		else:
 			commando = "None" 		
 		sensor = s1+s2+s3+s4+s5
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s%s%s%s-%s in list, command=%s" % (s1,s2,s3,s4,s5,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s%s%s%s-%s" % (s1,s2,s3,s4,s5))
@@ -962,11 +962,11 @@ class RFXTRX(object):
 		else:
 			commando = "None" 		
 		sensor = s1+s2+s3+s5
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s%s%s-%s in list, command=%s" % (s1,s2,s3,s5,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s%s%s-%s" % (s1,s2,s3,s5))
@@ -1021,12 +1021,12 @@ class RFXTRX(object):
 		else:
 			commando = "None" 		
 		sensor = s1+s2+s3
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s%s%s in list, unit=%s, command=%s" % (s1,s2,s3,unit,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"unit", value=unit)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"unit", value=unit)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s%s%s" % (s1,s2,s3))
@@ -1041,14 +1041,14 @@ class RFXTRX(object):
 		signalStrength = self.getSignalStrength(data[6])			
 		
  		self.plugin.debugLog(u"PCRemote %s with subtype %d command %d received" % (sensor, subtype, commcode))		
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"PCRemote %s in list, command=%d" % (sensor,commcode))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commcode)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"commandtype", value=cmdType)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"subtype", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"toggle", value=toggle)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commcode)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"commandtype", value=cmdType)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"subtype", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"toggle", value=toggle)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s" % (sensor))
@@ -1073,11 +1073,11 @@ class RFXTRX(object):
 			commando = "Pressed"	 			
 		else:
 			commando = "None"
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s%d in list, command=%s" % (housecode,adres,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s%d" % (housecode,adres))
@@ -1100,11 +1100,11 @@ class RFXTRX(object):
 			commando = "Program"	
 		else:
 			commando = "None" 		
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s%s in list, command=%s" % (housecode,adres,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s%d" % (housecode,adres))
@@ -1129,11 +1129,11 @@ class RFXTRX(object):
 			commando = "Change direction"				
 		else:
 			commando = "None" 		
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Switch Command %s in list, command=%s" % (sensor,commando))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"command", value=commando)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"command", value=commando)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,"%s" % (sensor))
@@ -1159,22 +1159,22 @@ class RFXTRX(object):
 		batteryLevel = self.getBatteryLevel(batteryAndSignalData)
 		signalStrength = self.getSignalStrength(batteryAndSignalData)
 		
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Rainsensor %d in list" % sensor)
 			
 			# get existing Rain Total 
-			existingRainTotal = self._getCurrentSensorValue(self.tempList[sensor],"raintotal")
+			existingRainTotal = self._getCurrentSensorValue(self.valuesList[sensor],"raintotal")
 			
 			# get month & week for current month & week totals
-			localProps = self.tempList[sensor].pluginProps
+			localProps = self.valuesList[sensor].pluginProps
 			currentMonthNumber = self.mk_int(localProps.get("currentMonthNumber", 0))
 			currentWeekNumber = self.mk_int(localProps.get("currentWeekNumber", 0))
 			#self.plugin.debugLog("current month number = %d, current week number = %d" % (currentMonthNumber, currentWeekNumber))
 						
 			# get current totals
-			currentMonthTotal = self._getCurrentSensorValue(self.tempList[sensor],"currentMonthTotal")
-			currentWeekTotal = self._getCurrentSensorValue(self.tempList[sensor],"currentWeekTotal")
-			currentDayTotal = self._getCurrentSensorValue(self.tempList[sensor],"currentDayTotal")
+			currentMonthTotal = self._getCurrentSensorValue(self.valuesList[sensor],"currentMonthTotal")
+			currentWeekTotal = self._getCurrentSensorValue(self.valuesList[sensor],"currentWeekTotal")
+			currentDayTotal = self._getCurrentSensorValue(self.valuesList[sensor],"currentDayTotal")
 
 			last7Day = localProps.get("last7Days", "")
 			if (len(last7Day) == 0):
@@ -1204,7 +1204,7 @@ class RFXTRX(object):
 			# is first packet of the day?
 			if (self.checkIfNewDay(sensor)):
 				self.plugin.debugLog("Entering new day")
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"previousDayTotal", value=currentDayTotal)	# copy current to previous
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"previousDayTotal", value=currentDayTotal)	# copy current to previous
 				currentDayTotal = 0 # reset current
 				
 				#remove oldest total & append 0
@@ -1214,7 +1214,7 @@ class RFXTRX(object):
 			# is first packet of the month?
 			if (currentMonthNumber != newMonthNumber):
 				self.plugin.debugLog("Entering new month = %i" % (newMonthNumber))
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"previousMonthTotal", value=currentMonthTotal) # copy current to previous
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"previousMonthTotal", value=currentMonthTotal) # copy current to previous
 				currentMonthTotal = 0 # reset current
 				localProps["currentMonthNumber"] = newMonthNumber # update current month week number
 				needToSavePlugInProps = True
@@ -1222,14 +1222,14 @@ class RFXTRX(object):
 			# is first packet of the week?
 			if (currentWeekNumber != newWeekNumber):
 				self.plugin.debugLog("Entering new week = %i" % (newWeekNumber))
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"previousWeekTotal", value=currentWeekTotal)	# copy current to previous
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"previousWeekTotal", value=currentWeekTotal)	# copy current to previous
 				currentWeekTotal = 0 # reset current
 				localProps["currentWeekNumber"] = newWeekNumber	# update current month week number
 				needToSavePlugInProps = True
 
 			# add new rain amount
 			currentDayTotal += changeInRainTotal
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"currentDayTotal", value=currentDayTotal)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"currentDayTotal", value=currentDayTotal)
 			
 			#remove most recent total & append new day total
 			last7DayArray.pop(-1)
@@ -1237,23 +1237,23 @@ class RFXTRX(object):
 			
 			# add new rain amount
 			currentWeekTotal += changeInRainTotal
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"currentWeekTotal", value=currentWeekTotal)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"currentWeekTotal", value=currentWeekTotal)
 			
 			# add new rain amount	
 			currentMonthTotal += changeInRainTotal
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"currentMonthTotal", value=currentMonthTotal)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"currentMonthTotal", value=currentMonthTotal)			
 
 			#self.plugin.debugLog("new month total = %f, new week total = %f, new day total = %f" % (currentMonthTotal, currentWeekTotal, currentDayTotal))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"rainrate", value=rainrate)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"raintotal", value=raintotal)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"rainrate", value=rainrate)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"raintotal", value=raintotal)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
 			localProps["last7Days"] = ','.join(map(str,last7DayArray))
 			needToSavePlugInProps = True
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "Total":
 				display = "%.2f" % (raintotal)
 			elif displayMode == "RainRate":
@@ -1278,21 +1278,21 @@ class RFXTRX(object):
 				display = "%.2f" % (currentMonthTotal)
 			elif displayMode == "DailyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentDayTotal, self._getCurrentSensorValue(self.tempList[sensor],"previousDayTotal"))
+				display = "%.2f / %.2f" % (currentDayTotal, self._getCurrentSensorValue(self.valuesList[sensor],"previousDayTotal"))
 			elif displayMode == "WeeklyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentWeekTotal, self._getCurrentSensorValue(self.tempList[sensor],"previousWeekTotal"))
+				display = "%.2f / %.2f" % (currentWeekTotal, self._getCurrentSensorValue(self.valuesList[sensor],"previousWeekTotal"))
 			elif displayMode == "MonthlyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentMonthTotal, self._getCurrentSensorValue(self.tempList[sensor],"previousMonthTotal"))
+				display = "%.2f / %.2f" % (currentMonthTotal, self._getCurrentSensorValue(self.valuesList[sensor],"previousMonthTotal"))
 				
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 			if (needToSavePlugInProps or (currentMonthNumber == 0)):
 				self.plugin.debugLog("saving plugin props")
-				self.tempList[sensor].replacePluginPropsOnServer(localProps)			
-				self.tempList[sensor] = indigo.devices[self.tempList[sensor].id]
+				self.valuesList[sensor].replacePluginPropsOnServer(localProps)			
+				self.valuesList[sensor] = indigo.devices[self.valuesList[sensor].id]
 		else:
 			self.handleUnknownDevice(devicetype,sensor)			
 
@@ -1303,9 +1303,9 @@ class RFXTRX(object):
 		svalue     = (ord(data[5])*256)+ord(data[6])
 		self.plugin.debugLog(u"RFXSensor %d with subtype %d and value %d" % (sensor,subtype,svalue))
 		self.plugin.debugLog(u"Data1: %s %s %s %s %s %s %s %s"% (ord(data[0]),ord(data[1]),ord(data[2]),ord(data[3]),ord(data[4]),ord(data[5]),ord(data[6]),ord(data[7 ])))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"RFXSensor %d in list" % sensor)
-			dev = self.tempList[sensor]
+			dev = self.valuesList[sensor]
 			if subtype == 0:
 				temp = ord(data[6])
 				vFactor = 1
@@ -1329,11 +1329,11 @@ class RFXTRX(object):
 				
 			if subtype == 1:
 				svalue = (ord(data[5])*256)+ord(data[6])
-				tempture = float(self.convertTemperatureToC(self._getCurrentSensorValue(dev,"temperature")))
-				self._addToBatchStatesChange(dev, key=u"temperature", value= temp,decimalPlaces= 1)
-				self.plugin.debugLog(u"RFXSensor read values: value=%d temperature=%.1f (C)" % (svalue,tempture))	
-				#svalue = (((svalue / 4.750) - 0.16) / 0.0062) / (1.0546 - 0.00216 * tempture)
-				svalue = ((svalue/4.75*1) / (1.0305 + (5.5E-6 * tempture) - (1.375E-7 * tempture * tempture)))
+				temp = float(self.convertTemperatureToC(self._getCurrentSensorValue(dev,"temperature")))
+				### do not update indigo; KW april 7. self._addToBatchStatesChange(dev, key=u"temperature", value= temp,decimalPlaces= 1)
+				self.plugin.debugLog(u"RFXSensor read values: value=%d temperature=%.1f (C)" % (svalue,temp))	
+				#svalue = (((svalue / 4.750) - 0.16) / 0.0062) / (1.0546 - 0.00216 * temp)
+				svalue = ((svalue/4.75*1) / (1.0305 + (5.5E-6 * temp) - (1.375E-7 * temp * temp)))
 				self._addToBatchStatesChange(dev, key=u"humidity", value=round(svalue,2),decimalPlaces= 0)
 				self._addToBatchStatesChange(dev, key=u"message", value="")
 
@@ -1400,51 +1400,51 @@ class RFXTRX(object):
 		self.plugin.debugLog(u"Data: %s %s %s %s"% (ord(data[6]),ord(data[7]),ord(data[8]),ord(data[9])))
 		
 		try:
-			cpu = int(self.tempList[sensor].pluginProps['countsPerUnit'])
+			cpu = int(self.valuesList[sensor].pluginProps['countsPerUnit'])
 		except:
 			cpu = 1
 			self.plugin.errorLog(u"please set the counts per unit (type = %d)" % (devicetype))
 
 		try:
-			uDesc = self.tempList[sensor].pluginProps['unitDescription']
+			uDesc = self.valuesList[sensor].pluginProps['unitDescription']
 		except:
 			uDesc = u"None"
 			self.plugin.errorLog(u"please set the unit description (type = %d)" % (devicetype))
 					
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"RFXMeter %d in list" % sensor)
 			if subtype == 0:
 				thisValue = (ord(data[6])*256*256*256)+(ord(data[7])*256*256)+(ord(data[8])*256)+ord(data[9])
 				if self.checkIfNewDay(sensor):
-					self._addToBatchStatesChange(self.tempList[sensor], key=u"startofdaycounter", value=thisValue)
+					self._addToBatchStatesChange(self.valuesList[sensor], key=u"startofdaycounter", value=thisValue)
 
-				lastValue = self._getCurrentSensorValue(self.tempList[sensor],"startofdaycounter")
+				lastValue = self._getCurrentSensorValue(self.valuesList[sensor],"startofdaycounter")
 				try:
 					dayvalue = float(thisValue-lastValue)/float(cpu)
 				except:
 					dayvalue = -1
 
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"counter", value=thisValue)
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"daycounter", value= '%.2f %s' % (dayvalue,uDesc))
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"counter", value=thisValue)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"daycounter", value= '%.2f %s' % (dayvalue,uDesc))
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 				#self._finalizeStatesChanges()
 
 			if subtype == 99: #Moet gewoon type 0 zijn, gedisabled door RdK ivm problemen met update van de daycounter, bovenstaande subtype 0 is de oude versie. John testen!
 				thisValue = (ord(data[6])*256*256*256)+(ord(data[7])*256*256)+(ord(data[8])*256)+ord(data[9])
 				if self.checkIfNewDay(sensor):
-					self._addToBatchStatesChange(self.tempList[sensor], key=u"startofdaycounter", value=thisValue)
+					self._addToBatchStatesChange(self.valuesList[sensor], key=u"startofdaycounter", value=thisValue)
 					#self._finalizeStatesChanges()
 
-				lastValue = self._getCurrentSensorValue(self.tempList[sensor],"startofdaycounter")
+				lastValue = self._getCurrentSensorValue(self.valuesList[sensor],"startofdaycounter")
 
 				try:
 					dayvalue = float(thisValue-lastValue)/float(cpu)
 				except:
 					dayvalue = -1
 
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"counter", value=thisValue)
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"daycounter", value= '%.2f %s' % (dayvalue,uDesc))
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"counter", value=thisValue)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"daycounter", value= '%.2f %s' % (dayvalue,uDesc))
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 				#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1480,21 +1480,21 @@ class RFXTRX(object):
 		sensor = (ord(data[5])*256)+ord(data[4])
 		self.plugin.debugLog(u"Temp sensor %d now %.2f degrees and %d humidity." % (sensor,temp,humid))
 				
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 			
-			if self.tempList[sensor].pluginProps['MultiplyBatteryLevel']:
+			if self.valuesList[sensor].pluginProps['MultiplyBatteryLevel']:
 				batteryLevel *= 10
 				if batteryLevel > 100:
 					batteryLevel = 100	
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value = temp,decimalPlaces= 1) 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidityStatus", value=humidityStatus)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value = temp,decimalPlaces= 1) 
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidity", value=humid)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidityStatus", value=humidityStatus)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
 			self.calcMinMax(sensor,"temperature",decimalPlaces=1)
@@ -1503,23 +1503,23 @@ class RFXTRX(object):
 			#self._finalizeStatesChanges()
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "TempHumid":
 				display = u"%.1f °%s / %d%%" % (temp, self.plugin.unitsTemperature, humid)
 			elif displayMode == "Temp":
 				display = u"%.1f °%s" % (temp, self.plugin.unitsTemperature)
 			elif displayMode == "TempMinMaxHumid":
-				display = u"%.1f °%s (%.1f-%.1f) %d%%" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"), humid)
+				display = u"%.1f °%s (%.1f-%.1f) %d%%" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"), humid)
 			elif displayMode == "TempMinMax":
-				display = u"%.1f °%s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"))
+				display = u"%.1f °%s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"))
 
-			if self.tempList[sensor].pluginProps["sensorValueType"] == "Humid":
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid, decimalPlaces= 1, uiValue=display)
+			if self.valuesList[sensor].pluginProps["sensorValueType"] == "Humid":
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidity", value=humid, decimalPlaces= 1, uiValue=display)
 			else: #Temperature
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value=temp, decimalPlaces= 1, uiValue=display)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value=temp, decimalPlaces= 1, uiValue=display)
 				
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display, uiValue=display)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display, uiValue=display)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1538,13 +1538,13 @@ class RFXTRX(object):
 		signalStrength = self.getSignalStrength(batteryAndSignalData)			
 		
 		self.plugin.debugLog(u"Doorbell %d sound is %.2f." % (sensor,sound))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Doorbell %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"Sound", value=sound)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value="Sound is %.1d" % (sound))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"Sound", value=sound)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value="Sound is %.1d" % (sound))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()	
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1583,17 +1583,17 @@ class RFXTRX(object):
 		signalStrength = self.getSignalStrength(batteryAndSignalData)			
 		
 		self.plugin.debugLog(u"BBQ sensor %d temp1 now %.2f and temp2 now %.2f." % (sensor,temp1,temp2))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"BBQ sensor %d in list" % sensor)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature2", value=temp2,decimalPlaces= 1)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature2", value=temp2,decimalPlaces= 1)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
 
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "Temp1":
 				display = "%.1f %s" % (temp1, self.plugin.unitsTemperature)
 			elif displayMode == "Temp2":
@@ -1604,7 +1604,7 @@ class RFXTRX(object):
 			self.calcMinMax(sensor,"temperature1",decimalPlaces= 1)
 			self.calcMinMax(sensor,"temperature2",decimalPlaces= 1)
 			
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()	
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1641,18 +1641,18 @@ class RFXTRX(object):
 		
 		sensor = (ord(data[5])*256)+ord(data[4])
 		self.plugin.debugLog(u"Temp sensor %d now %.2f degrees and %d humidity." % (sensor,temp,humid))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value=temp ,decimalPlaces= 1) 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"barometer", value=baro)			
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidityStatus", value=humidityStatus)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"forecast", value=forecast)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value=temp ,decimalPlaces= 1) 
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidity", value=humid)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"barometer", value=baro)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidityStatus", value=humidityStatus)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"forecast", value=forecast)			
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
 			self.calcMinMax(sensor,"temperature",decimalPlaces=1)
@@ -1661,7 +1661,7 @@ class RFXTRX(object):
 			#self._finalizeStatesChanges()
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "TempHumidBaro":
 				display = "%.1f %s / %d%% / %d hPa" % (temp, self.plugin.unitsTemperature, humid, baro)
 			elif displayMode == "Temp":
@@ -1671,13 +1671,13 @@ class RFXTRX(object):
 			elif displayMode == "Forecast":
 				display = "%s" % (forecast)							
 			elif displayMode == "TempMinMaxHumidBaro":
-				display = "%.1f %s (%.1f-%.1f) %d%% / %d hPa" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"), humid, baro)
+				display = "%.1f %s (%.1f-%.1f) %d%% / %d hPa" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"), humid, baro)
 			elif displayMode == "TempMinMax":
-				display = "%.1f %s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"))
+				display = "%.1f %s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"))
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1726,22 +1726,22 @@ class RFXTRX(object):
 		avgSpeed = self.convertWindspeedToUnits(avgSpeed)
 		gust = self.convertWindspeedToUnits(gust)
 		self.plugin.debugLog(u"Wind sensor %d direction %d avgSpeed %.2f gust %.2f." % (sensor, direction, avgSpeed, gust))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Wind sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"avgSpeed", value=avgSpeed)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"gust", value=gust)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"directionDegrees", value=direction)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"directionText", value=self.convertDirectionDegreesToText(direction))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"avgSpeed", value=avgSpeed)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"gust", value=gust)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"directionDegrees", value=direction)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"directionText", value=self.convertDirectionDegreesToText(direction))
 			if (subtype == 4):
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value=self.convertTemperatureToUnit(temp),decimalPlaces= 1)
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"windChill", value=self.convertTemperatureToUnit(chill))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value=self.convertTemperatureToUnit(temp),decimalPlaces= 1)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"windChill", value=self.convertTemperatureToUnit(chill))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "Speed":
 				display = "%d %s" % (avgSpeed, self.plugin.unitsWind)
 			elif displayMode == "SpeedDirection":
@@ -1750,7 +1750,7 @@ class RFXTRX(object):
 				display = "%d %s %s" % (avgSpeed, self.plugin.unitsWind, direction)
 			elif displayMode == "SpeedGust":
 				display = "%d %s (%d %s)" % (avgSpeed, self.plugin.unitsWind, gust, self.plugin.unitsWind)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)			
@@ -1770,18 +1770,18 @@ class RFXTRX(object):
 
 		sensor = (ord(data[5])*256)+ord(data[4])+ord(data[1])
 		self.plugin.debugLog(u"Humidity sensor %d now %d humidity." % (sensor,humid))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Humidity sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"humidity", value=humid)		
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"humidity", value=humid)		
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
 			self.calcMinMax(sensor,"humidity",decimalPlaces=0)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=u"%d%%" % humid)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=u"%d%%" % humid)
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(sensorType,sensor)
@@ -1809,41 +1809,41 @@ class RFXTRX(object):
 		temp = self.convertTemperatureToUnit(temp)
 		
 		self.plugin.debugLog(u"UV sensor %d now %.1f UV and %d degrees." % (sensor,UVLevel,temp))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 			if subtype==3:
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value=temp,decimalPlaces= 1)
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value=temp,decimalPlaces= 1)
 				#self._finalizeStatesChanges()
 
 				self.calcMinMax(sensor,"temperature",decimalPlaces=1)
 			else:
-				self._addToBatchStatesChange(self.tempList[sensor], key=u"temperature", value="")
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"UVLevel", value=UVLevel,decimalPlaces= 1)		
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)			
+				self._addToBatchStatesChange(self.valuesList[sensor], key=u"temperature", value="")
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"UVLevel", value=UVLevel,decimalPlaces= 1)		
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)			
 			#self._finalizeStatesChanges()
 
 			self.calcMinMax(sensor,"UVLevel",decimalPlaces=1)
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "Uv":
 				display = "%.1f" % (UVLevel)
 			elif displayMode == "UvMax":
-				display = "%.1f (%.1f)" % (UVLevel, float(self._getCurrentSensorValue(self.tempList[sensor],"maxUVLevel")))
+				display = "%.1f (%.1f)" % (UVLevel, float(self._getCurrentSensorValue(self.valuesList[sensor],"maxUVLevel")))
 			if displayMode == "UvTemp":
 				display = "%.1f / %d" % (UVLevel, temp)				
 			elif displayMode == "UvMaxTemp":
-				display = "%.1f (%.1f) / %d" % (UVLevel, float(self._getCurrentSensorValue(self.tempList[sensor],"maxUVLevel")), temp)
+				display = "%.1f (%.1f) / %d" % (UVLevel, float(self._getCurrentSensorValue(self.valuesList[sensor],"maxUVLevel")), temp)
 			elif displayMode == "UvTempMinMax":
-				display = "%.1f / %d (%d - %d)" % (UVLevel, temp, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"))
+				display = "%.1f / %d (%d - %d)" % (UVLevel, temp, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"))
 			elif displayMode == "UvMinMaxTempMinMax":
-				display = "%.1f (%.1f) / %d (%d - %d)" % (UVLevel, float(self._getCurrentSensorValue(self.tempList[sensor],"maxUVLevel")), temp, self._getCurrentSensorValue(self.tempList[sensor],"mintemperature"), self._getCurrentSensorValue(self.tempList[sensor],"maxtemperature"))				
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)			
+				display = "%.1f (%.1f) / %d (%d - %d)" % (UVLevel, float(self._getCurrentSensorValue(self.valuesList[sensor],"maxUVLevel")), temp, self._getCurrentSensorValue(self.valuesList[sensor],"mintemperature"), self._getCurrentSensorValue(self.valuesList[sensor],"maxtemperature"))				
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1860,19 +1860,19 @@ class RFXTRX(object):
 		sensor = (ord(data[5])*256)+ord(data[4])
 			
 		self.plugin.debugLog(u"Current sensor %d now %.1f/%.1f/%.1f" % (sensor,Current1,Current2,Current3))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Current sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"AmpCh1", value= Current1,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"AmpCh2", value= Current2,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"AmpCh3", value= Current3,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"AmpCh1", value= Current1,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"AmpCh2", value= Current2,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"AmpCh3", value= Current3,decimalPlaces= 1)	
 
-			#self._addToBatchStatesChange(self.tempList[sensor], key=u"type", value=subtype)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel", value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)			
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			#self._addToBatchStatesChange(self.valuesList[sensor], key=u"type", value=subtype)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel", value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "AmpCh1":
 				display = "%.1f" % (Current1)
 			elif displayMode == "AmpCh2":
@@ -1881,7 +1881,7 @@ class RFXTRX(object):
 				display = "%.1f" % (Current3)				
 			elif displayMode == "AllAmps":
 				display = "%.1f / %.1f / %.1f " % (Current1,Current2,Current3)				
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)
@@ -1897,24 +1897,24 @@ class RFXTRX(object):
 		sensor = (ord(data[4])*256)+ord(data[5])
 			
 		self.plugin.debugLog(u"Energy Usage sensor %d now %.1f(W)/Total %.1f (kWh)/" % (sensor,CurrentUsage,TotalkWh))
-		if sensor in self.tempList.keys():
+		if sensor in self.valuesList.keys():
 			self.plugin.debugLog(u"Energy Usage sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"Watts",          value=CurrentUsage,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"kWh",            value=TotalkWh,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"Watts",          value=CurrentUsage,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"kWh",            value=TotalkWh,decimalPlaces= 1)	
 
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"batteryLevel",   value=batteryLevel)
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"signalStrength", value=signalStrength)			
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"lastUpdated",    value=time.strftime('%Y/%m/%d %H:%M:%S'))
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"batteryLevel",   value=batteryLevel)
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"signalStrength", value=signalStrength)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"lastUpdated",    value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			
 			display = "--"
-			displayMode = self.tempList[sensor].pluginProps["displayField"]
+			displayMode = self.valuesList[sensor].pluginProps["displayField"]
 			if displayMode == "Watts":
 				display = "%.1f" % (CurrentUsage)
 			elif displayMode == "kWh":
 				display = "%.1f" % (TotalkWh)
 			elif displayMode == "CurrentTotal":
 				display = "Actual (W) %.1f /Total (kWh) %.1f" % (CurrentUsage,TotalkWh)				
-			self._addToBatchStatesChange(self.tempList[sensor], key=u"display", value=display)			
+			self._addToBatchStatesChange(self.valuesList[sensor], key=u"display", value=display)			
 			#self._finalizeStatesChanges()
 		else:
 			self.handleUnknownDevice(devicetype,sensor)			
@@ -2005,7 +2005,7 @@ class RFXTRX(object):
 		try:
 			minstateName = u"min"+stateName
 			maxstateName = u"max"+stateName
-			dev = self.tempList[sensor]
+			dev = self.valuesList[sensor]
 			if u"min"+stateName not in dev.states: return 
 			lastValue = float(self._getCurrentSensorValue(dev,stateName))
 			#lastValue = dev.states[stateName] 
@@ -2030,7 +2030,7 @@ class RFXTRX(object):
 
 	def checkIfNewDay(self,sensor):
 		try:
-			lastDateTime = self._getCurrentSensorValue(self.tempList[sensor],u"lastUpdated")
+			lastDateTime = self._getCurrentSensorValue(self.valuesList[sensor],u"lastUpdated")
 			newdates = time.strftime('%Y/%m/%d %H:%M:%S')
 			compTime = 10
 			#012345678901234567890
@@ -2258,28 +2258,28 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'BBQ':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'Temperature':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 			# Below could be better implemented to avoid the risk of infinite loops (replacePluginPropsOnServer calls deviceStartComm). Believe however that it loops only once as all values are set and defaulted.
 			if "MultiplyBatteryLevel" not in localProps:
 				self.plugin.debugLog(u'Adding MultiplyBatteryLevel to plugin props')
@@ -2327,65 +2327,65 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'Barometer':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'Rainsensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'ARCSwitch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
 			if not force:
 				self.plugin.debugLog(u"Adding ARC Switch (KaKu with wheels) %s (%s)." % (adres,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'RollerTrolRemote':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
 			if not force:
 				self.plugin.debugLog(u"Adding RollerTrol Remote %s (%s)." % (adres,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'BlindsRemote':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
 			if not force:
 				self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'X10Switch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
 			if not force:
 				self.plugin.debugLog(u"Adding X10 Switch %s (%s)." % (adres,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'ACSwitch':
 			adres = dev.pluginProps['address']
 			unitcode =str(100+int(dev.pluginProps['unit']))[1:3]
@@ -2393,10 +2393,10 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding AC Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'LWSwitch':
 			adres = dev.pluginProps['address']
 			unitcode =str(100+int(dev.pluginProps['unit']))[1:3]
@@ -2404,103 +2404,103 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding LightWave Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'LWRemote':
 			adres = dev.pluginProps['address']
 			sensor = adres
 			if not force:
 				self.plugin.debugLog(u"Adding LightWave Remote housecode %s (%s)." % (adres,sensor))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'PCRemote':
 			adres = dev.pluginProps['address']
 			sensor = adres
 			if not force:
 				self.plugin.debugLog(u"Adding PCRemote %s." % (adres))			
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'SecuritySensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'RFXSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding RFXSensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'RFXMeter':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding RFXMeter %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'UVMeter':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding UV Meter %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'ELEC1CurrentSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding ELEC1 Current Sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'ELEC2EnergyUsageSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding ELEC2 Energy Usage Sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev
 		elif dev.deviceTypeId == u'WindSensor':
 			sensor = int(dev.pluginProps['sensorNumber'])
 			if not force:
 				self.plugin.debugLog(u"Adding Wind Sensor %s." % sensor)
 			else:
-				del self.tempList[sensor]
+				del self.valuesList[sensor]
 				dev = indigo.devices[dev.id]
-			if sensor not in self.tempList.keys():
-				self.tempList[sensor] = dev	
+			if sensor not in self.valuesList.keys():
+				self.valuesList[sensor] = dev	
 				
 		if needToSavePlugInProps:
 			self.plugin.debugLog(u'Updating plugin props, Sensor %s' % sensor)
 			dev.replacePluginPropsOnServer(localProps)		
-			self.tempList[sensor] = indigo.devices[dev.id]
+			self.valuesList[sensor] = indigo.devices[dev.id]
 
 	def deviceStop(self, dev):
 		try:
 			sensor = int(dev.pluginProps['sensorNumber'])
-			del self.tempList[sensor]
+			del self.valuesList[sensor]
 			if dev.deviceTypeId == u'Temperature':
 				dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
 			
