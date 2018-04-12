@@ -141,6 +141,13 @@ class Plugin(indigo.PluginBase):
 		sendSuccess = False
 		if self.RFXTRX.ColorMin(pluginAction, dev) == True:
 			sendSuccess = True	
+
+	def filterdevices(self, filter="", valuesDict=None, typeId="", devId=""):
+		return self.RFXTRX.filterdevices()
+
+	def buttonConfirmRESETCALLBACK(self,valuesDict=None, filter="", typeId="", devId=""):
+		self.RFXTRX.ResetDevice(valuesDict["selectedDevice"])
+		return valuesDict
 			
 	########################################
 	# Relay / Dimmer Action callback
