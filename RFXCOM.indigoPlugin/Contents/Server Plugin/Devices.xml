@@ -311,9 +311,9 @@
 	<Device type="sensor" id="Temperature">
 		<Name>Temperature Sensor</Name>
 		<ConfigUI>
-            <Field type="checkbox" id="SupportsBatteryLevel" hidden="true" defaultValue="true"/>
-            <Field type="checkbox" id="SupportsSensorValue"  hidden="true" defaultValue="true"/>
-            <Field type="checkbox" id="SupportsOnState"  hidden="true" defaultValue="false"/>
+			<Field type="checkbox" id="SupportsBatteryLevel" hidden="true" defaultValue="true"/>
+			<Field type="checkbox" id="SupportsSensorValue"  hidden="true" defaultValue="true"/>
+			<Field type="checkbox" id="SupportsOnState"  hidden="true" defaultValue="false"/>
 			<Field id="subModel" type="textfield" hidden="true" defaultValue="Temperature">
 				<Label>Optional Sub Model Name :</Label>
 			</Field>	
@@ -339,7 +339,7 @@
 				<Label/>
 			</Field>
 			<Field id="sensorValueType" type="Menu" defaultValue="Temp">
-				<Label>Sensor Value:</Label>
+				<Label>Show in Sensor Value:</Label>
 				<List>
 					<Option value="Temp">Temperature</Option>
 					<Option value="Humid">Humidity</Option>
