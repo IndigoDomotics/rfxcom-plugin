@@ -55,12 +55,16 @@ class RFXTRX(object):
 						break 
 
 			self.plugin.debugLog("finalizeStatesChanges:" +dev.name+" :" + unicode(self.batchStatesUpdate[devId]) )
-			dev.updateStatesOnServer(self.batchStatesUpdate[devId])
+			try:
+				dev.updateStatesOnServer(self.batchStatesUpdate[devId])
+			except Exception, e:
+				indigo.server.log("_finalizeStatesChanges in Line '%s' has error='%s'" % (sys.exc_traceback.tb_lineno, e)+", dev: "+ dev.name+"  "+ unicode(self.batchStatesUpdate[devId]))
+ 
 			self.deviceStart(dev, force=True)
 		self.batchStatesUpdate = {}
 		return
 
-	def _addToBatchStatesChange(self, dev, key="", value="",decimalPlaces="", uiValue=""):
+	def _addToBatchStatesChange(self, dev, key="", value="", decimalPlaces="", uiValue=""):
 		devID = dev.id
 
 		if key not in dev.states:  
@@ -126,10 +130,18 @@ class RFXTRX(object):
 
 
 		self.plugin.unitsTemperature = valuesDict.get(u'unitsTemperature', u"C")
-		self.plugin.unitsRain = valuesDict.get(u'unitsRain', u"mm")
-		self.plugin.unitsWind = valuesDict.get(u'unitsWind', u"mps")
+		self.plugin.unitsRain        = valuesDict.get(u'unitsRain', u"mm")
+		self.plugin.unitsWind        = valuesDict.get(u'unitsWind', u"mps")
 
-		self.plugin.unknownAsError = valuesDict.get(u'unknownAsError', False)
+		try:    self.plugin.digitsTemperature = int(valuesDict.get(u'digitsTemperature', 1))
+		except: self.plugin.digitsTemperature = 1
+		try:    self.plugin.digitsRain        = int(valuesDict.get(u'digitsRain', 1))
+		except: self.plugin.digitsRain        = 1
+		try:    self.plugin.digitsWind        = int(valuesDict.get(u'digitsWind', 1))
+		except: self.plugin.digitsWind        = 1
+
+
+		self.plugin.unknownAsError       = valuesDict.get(u'unknownAsError', False)
 		self.plugin.showUndecodedPackets = valuesDict.get(u'showUndecodedPackets', False)
 		return True
 
@@ -310,16 +322,16 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy:
 			dev = indigo.devices[int(self.devicesCopy[sensor].id)]
 			# set states to 0
-			self._addToBatchStatesChange(dev, key=u"rainrate", value=0,decimalPlaces=2)
-			self._addToBatchStatesChange(dev, key=u"raintotal", value=0,decimalPlaces=2)
+			self._addToBatchStatesChange(dev, key=u"rainrate", value=0, decimalPlaces=self.plugin.digitsRain)
+			self._addToBatchStatesChange(dev, key=u"raintotal", value=0, decimalPlaces=self.plugin.digitsRain)
 			self._addToBatchStatesChange(dev, key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
-			self._addToBatchStatesChange(dev, key=u"currentDayTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"previousDayTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"currentWeekTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"previousWeekTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"currentMonthTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"previousMonthTotal", value=0,decimalPlaces=2)			
-			self._addToBatchStatesChange(dev, key=u"raintotal", value=0,decimalPlaces=2)			
+			self._addToBatchStatesChange(dev, key=u"currentDayTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"previousDayTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"currentWeekTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"previousWeekTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"currentMonthTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"previousMonthTotal", value=0, decimalPlaces=self.plugin.digitsRain)			
+			self._addToBatchStatesChange(dev, key=u"raintotal", value=0, decimalPlaces=self.plugin.digitsRain)			
 			#self._finalizeStatesChanges()()
 			# refresh
 			dev = indigo.devices[dev.id]
@@ -1179,13 +1191,13 @@ class RFXTRX(object):
 			# get month & week for current month & week totals
 			localProps = self.devicesCopy[sensor].pluginProps
 			currentMonthNumber = self.mk_int(localProps.get("currentMonthNumber", 0))
-			currentWeekNumber = self.mk_int(localProps.get("currentWeekNumber", 0))
+			currentWeekNumber  = self.mk_int(localProps.get("currentWeekNumber", 0))
 			#self.plugin.debugLog("current month number = %d, current week number = %d" % (currentMonthNumber, currentWeekNumber))
 						
 			# get current totals
 			currentMonthTotal = self._getCurrentSensorValue(self.devicesCopy[sensor],"currentMonthTotal")
-			currentWeekTotal = self._getCurrentSensorValue(self.devicesCopy[sensor],"currentWeekTotal")
-			currentDayTotal = self._getCurrentSensorValue(self.devicesCopy[sensor],"currentDayTotal")
+			currentWeekTotal  = self._getCurrentSensorValue(self.devicesCopy[sensor],"currentWeekTotal")
+			currentDayTotal   = self._getCurrentSensorValue(self.devicesCopy[sensor],"currentDayTotal")
 
 			last7Day = localProps.get("last7Days", "")
 			if (len(last7Day) == 0):
@@ -1215,7 +1227,7 @@ class RFXTRX(object):
 			# is first packet of the day?
 			if (self.checkIfNewDay(sensor)):
 				self.plugin.debugLog("Entering new day")
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousDayTotal", value=currentDayTotal)	# copy current to previous
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousDayTotal", value=currentDayTotal, decimalPlaces = self.plugin.digitsRain)	# copy current to previous
 				currentDayTotal = 0 # reset current
 				
 				#remove oldest total & append 0
@@ -1225,7 +1237,7 @@ class RFXTRX(object):
 			# is first packet of the month?
 			if (currentMonthNumber != newMonthNumber):
 				self.plugin.debugLog("Entering new month = %i" % (newMonthNumber))
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousMonthTotal", value=currentMonthTotal) # copy current to previous
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousMonthTotal", value=currentMonthTotal, decimalPlaces = self.plugin.digitsRain) # copy current to previous
 				currentMonthTotal = 0 # reset current
 				localProps["currentMonthNumber"] = newMonthNumber # update current month week number
 				needToSavePlugInProps = True
@@ -1233,14 +1245,14 @@ class RFXTRX(object):
 			# is first packet of the week?
 			if (currentWeekNumber != newWeekNumber):
 				self.plugin.debugLog("Entering new week = %i" % (newWeekNumber))
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousWeekTotal", value=currentWeekTotal)	# copy current to previous
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"previousWeekTotal", value=currentWeekTotal, decimalPlaces = self.plugin.digitsRain)	# copy current to previous
 				currentWeekTotal = 0 # reset current
 				localProps["currentWeekNumber"] = newWeekNumber	# update current month week number
 				needToSavePlugInProps = True
 
 			# add new rain amount
 			currentDayTotal += changeInRainTotal
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"currentDayTotal", value=currentDayTotal)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"currentDayTotal", value=currentDayTotal, decimalPlaces = self.plugin.digitsRain)
 			
 			#remove most recent total & append new day total
 			last7DayArray.pop(-1)
@@ -1248,15 +1260,15 @@ class RFXTRX(object):
 			
 			# add new rain amount
 			currentWeekTotal += changeInRainTotal
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"currentWeekTotal", value=currentWeekTotal)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"currentWeekTotal", value=currentWeekTotal, decimalPlaces = self.plugin.digitsRain)
 			
 			# add new rain amount	
 			currentMonthTotal += changeInRainTotal
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"currentMonthTotal", value=currentMonthTotal)			
 
 			#self.plugin.debugLog("new month total = %f, new week total = %f, new day total = %f" % (currentMonthTotal, currentWeekTotal, currentDayTotal))
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"rainrate", value=rainrate)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"raintotal", value=raintotal)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"rainrate", value=rainrate, decimalPlaces = self.plugin.digitsRain)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"raintotal", value=raintotal, decimalPlaces = self.plugin.digitsRain)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)
@@ -1266,9 +1278,9 @@ class RFXTRX(object):
 			display = "--"
 			displayMode = self.devicesCopy[sensor].pluginProps["displayField"]
 			if displayMode == "Total":
-				display = "%.2f" % (raintotal)
+				display = "%s" % (self.rainToString(raintotal))
 			elif displayMode == "RainRate":
-				display = "%.2f" % (rainrate)
+				display = "%s" % (self.rainToString(rainrate))
 			elif displayMode == "CurrentStatus":
 				if (rainrate > 0):
 					isRaining = "Yes"
@@ -1276,26 +1288,26 @@ class RFXTRX(object):
 					isRaining = "No"				
 				display = "%s" % (isRaining)
 			elif displayMode == "Daily":
-				display = "%.2f" % (currentDayTotal)
+				display = "%s" % (self.rainToString(currentDayTotal))
 			elif displayMode == "Last7":
 				# calculate last7dayTotal
 				last7DayTotal = 0
 				for eachDay in last7DayArray:
 					last7DayTotal += float(eachDay)
-				display = "%.2f" % (last7DayTotal)
+				display = "%s" % (self.rainToString(last7DayTotal))
 			elif displayMode == "Weekly":
-				display = "%.2f" % (currentWeekTotal)
+				display = "%s" % (self.rainToString(currentWeekTotal))
 			elif displayMode == "Monthly":
-				display = "%.2f" % (currentMonthTotal)
+				display = "%s" % (self.rainToString(currentMonthTotal))
 			elif displayMode == "DailyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentDayTotal, self._getCurrentSensorValue(self.devicesCopy[sensor],"previousDayTotal"))
+				display = "%s / %s" % (self.rainToString(currentDayTotal), self.rainToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"previousDayTotal")))
 			elif displayMode == "WeeklyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentWeekTotal, self._getCurrentSensorValue(self.devicesCopy[sensor],"previousWeekTotal"))
+				display = "%s / %s" % (self.rainToString(currentWeekTotal), self.rainToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"previousWeekTotal")))
 			elif displayMode == "MonthlyCurrentPrevious":
 				#self._finalizeStatesChanges()
-				display = "%.2f / %.2f" % (currentMonthTotal, self._getCurrentSensorValue(self.devicesCopy[sensor],"previousMonthTotal"))
+				display = "%s / %s" % (self.rainToString(currentMonthTotal), self.rainToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"previousMonthTotal")))
 				
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=display)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
@@ -1328,10 +1340,10 @@ class RFXTRX(object):
 				temp = temp*vFactor*0.01
 				
 				temp = self.convertTemperatureToUnit(temp)
-				self._addToBatchStatesChange(dev, key=u"temperature", value= temp,decimalPlaces= 1)
+				self._addToBatchStatesChange(dev, key=u"temperature", value= temp, decimalPlaces= self.plugin.digitsTemperature)
 				self._addToBatchStatesChange(dev, key=u"message", value="")
 
-				self.calcMinMax(sensor,"temperature",decimalPlaces=1)
+				self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
 
 				self._addToBatchStatesChange(dev, key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 
@@ -1341,20 +1353,21 @@ class RFXTRX(object):
 			if subtype == 1:
 				svalue = (ord(data[5])*256)+ord(data[6])
 				temp = float(self.convertTemperatureToC(self._getCurrentSensorValue(dev,"temperature")))
-				### do not update indigo; KW april 7. self._addToBatchStatesChange(dev, key=u"temperature", value= temp,decimalPlaces= 1)
+				### do not update indigo; KW april 7. self._addToBatchStatesChange(dev, key=u"temperature", value= temp, decimalPlaces= self.plugin.digitsTemperature)
 				self.plugin.debugLog(u"RFXSensor read values: value=%d temperature=%.1f (C)" % (svalue,temp))	
 				#svalue = (((svalue / 4.750) - 0.16) / 0.0062) / (1.0546 - 0.00216 * temp)
 				svalue = ((svalue/4.75*1) / (1.0305 + (5.5E-6 * temp) - (1.375E-7 * temp * temp)))
-				self._addToBatchStatesChange(dev, key=u"humidity", value=round(svalue,2),decimalPlaces= 0)
+				humid  = svalue
+				self._addToBatchStatesChange(dev, key=u"humidity", value=round(svalue,2), decimalPlaces= 0)
 				self._addToBatchStatesChange(dev, key=u"message", value="")
 
-				self.calcMinMax(sensor,"temperature",decimalPlaces=1)
-				self.calcMinMax(sensor,"humidity",decimalPlaces=0)
+				self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
+				self.calcMinMax(sensor,"humidity", decimalPlaces=0)
 				
 				if self._getCurrentSensorValue(dev,"resetDayValue")==1:
 					 # this is doen in calcMinMax
-					#self._addToBatchStatesChange(dev, key=u"minhumidity", value=round(svalue,2),decimalPlaces= 0)
-					#self._addToBatchStatesChange(dev, key=u"maxhumidity", value=round(svalue,2),decimalPlaces= 0)
+					#self._addToBatchStatesChange(dev, key=u"minhumidity", value=round(svalue,2), decimalPlaces= 0)
+					#self._addToBatchStatesChange(dev, key=u"maxhumidity", value=round(svalue,2), decimalPlaces= 0)
 					self._addToBatchStatesChange(dev, key=u"resetDayValue", value=0)
 				self._addToBatchStatesChange(dev, key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 
@@ -1389,19 +1402,23 @@ class RFXTRX(object):
 				self.plugin.debugLog(u"Setting display value to %s, temp=%s" % (dev.pluginProps["displayField"],self._getCurrentSensorValue(dev,"temperature")))	
 				display = "--"
 				displayMode = dev.pluginProps["displayField"]
-				if displayMode == "TempHumid": #value= '%.2f %s' % 
-					display = "%.1f %s / %d%%" % (float(self._getCurrentSensorValue(dev,"temperature")), self.plugin.unitsTemperature, self._getCurrentSensorValue(dev,"humidity"))
+				if displayMode == "TempHumid":
+					display = u"%s °%s / %d%%" % (self.temperatureToString(temp), tUnits, humid)
 				elif displayMode == "Temp":
-					display = "%.1f %s" % (float(self._getCurrentSensorValue(dev,"temperature")), self.plugin.unitsTemperature)
+					display = u"%s °%s" % (self.temperatureToString(temp), tUnits)
 				elif displayMode == "TempMinMaxHumid":
-					display = "%.1f %s (%.1f-%.1f) %d%%" % (float(self._getCurrentSensorValue(dev,"temperature")), self.plugin.unitsTemperature, float(self._getCurrentSensorValue(dev,"mintemperature")), float(self._getCurrentSensorValue(dev,"maxtemperature")), self._getCurrentSensorValue(dev,"humidity"))
+					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), tUnits,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
 				elif displayMode == "TempMinMax":
-					display = "%.1f %s (%.1f-%.1f)" % (float(self._getCurrentSensorValue(dev,"temperature")), self.plugin.unitsTemperature, float(self._getCurrentSensorValue(dev,"mintemperature")), float(self._getCurrentSensorValue(dev,"maxtemperature")))				
-				self._addToBatchStatesChange(dev, key=u"display", value=display)
+					display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), tUnits, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
+
+				if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
+				else: #Temperature
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
 
 			#self._finalizeStatesChanges()
-		else:
-			self.handleUnknownDevice(devicetype,sensor)
+			else:
+				self.handleUnknownDevice(devicetype,sensor)
 
 	def handleRFXMeter(self,data):
 		devicetype = ord(data[1])
@@ -1499,7 +1516,7 @@ class RFXTRX(object):
 				if batteryLevel > 100:
 					batteryLevel = 100	
 
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature",    value = temp,       decimalPlaces= 1) 
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature",    value = temp,       decimalPlaces= self.plugin.digitsTemperature) 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidity",       value=humid,        decimalPlaces= 0)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidityStatus", value=humidityStatus)
 
@@ -1508,26 +1525,28 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
-			self.calcMinMax(sensor,"temperature",decimalPlaces=1)
+			self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
 			self.calcMinMax(sensor,"humidity",   decimalPlaces=0)
 
 			#self._finalizeStatesChanges()
 			
-			display = "--"
-			displayMode = self.devicesCopy[sensor].pluginProps["displayField"]
+			display         = "--"
+			displayMode     = self.devicesCopy[sensor].pluginProps["displayField"]
+			tDigits         = str(self.plugin.digitsTemperature)
+			tUnits          =  self.plugin.unitsTemperature
 			if displayMode == "TempHumid":
-				display = u"%.1f °%s / %d%%" % (temp, self.plugin.unitsTemperature, humid)
+				display = u"%s °%s / %d%%" % (self.temperatureToString(temp), tUnits, humid)
 			elif displayMode == "Temp":
-				display = u"%.1f °%s" % (temp, self.plugin.unitsTemperature)
+				display = u"%s °%s" % (self.temperatureToString(temp), tUnits)
 			elif displayMode == "TempMinMaxHumid":
-				display = u"%.1f °%s (%.1f-%.1f) %d%%" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"), humid)
+					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), tUnits,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
 			elif displayMode == "TempMinMax":
-				display = u"%.1f °%s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"))
+				display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), tUnits, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 
 			if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
 				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
 			else: #Temperature
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= 1, uiValue=display)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
 				
 				
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
@@ -1597,23 +1616,24 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"BBQ sensor %d in list" % sensor)
 
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature2", value=temp2,decimalPlaces= 1)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature1", value=temp1, decimalPlaces= self.plugin.digitsTemperature)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature2", value=temp2, decimalPlaces= self.plugin.digitsTemperature)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature1", value=temp1,decimalPlaces= 1)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature1", value=temp1, decimalPlaces= self.plugin.digitsTemperature)
 
 			display = "--"
 			displayMode = self.devicesCopy[sensor].pluginProps["displayField"]
 			if displayMode == "Temp1":
-				display = "%.1f %s" % (temp1, self.plugin.unitsTemperature)
+				display = "%s %s" % (self.temperatureToString(temp1), self.plugin.unitsTemperature)
 			elif displayMode == "Temp2":
-				display = "%.1f %s" % (temp2, self.plugin.unitsTemperature)
+				display = "%s %s" % (self.temperatureToString(temp2), self.plugin.unitsTemperature)
 			elif displayMode == "Temp12":
-				display = "%.1f/%.1f %s" % (temp1,temp2, self.plugin.unitsTemperature)
+				display = "%s/%s %s" % (self.temperatureToString(temp1),self.temperatureToString(temp2), self.plugin.unitsTemperature)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=display)
 
-			self.calcMinMax(sensor,"temperature1",decimalPlaces= 1)
-			self.calcMinMax(sensor,"temperature2",decimalPlaces= 1)
+			self.calcMinMax(sensor,"temperature1", decimalPlaces= self.plugin.digitsTemperature)
+			self.calcMinMax(sensor,"temperature2", decimalPlaces= self.plugin.digitsTemperature)
 			
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()	
@@ -1655,7 +1675,7 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=temp ,decimalPlaces= 1) 
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=temp, decimalPlaces= self.plugin.digitsTemperature) 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidity", value=humid)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"barometer", value=baro)			
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidityStatus", value=humidityStatus)
@@ -1666,25 +1686,25 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
-			self.calcMinMax(sensor,"temperature",decimalPlaces=1)
-			self.calcMinMax(sensor,"humidity",decimalPlaces=0)
+			self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
+			self.calcMinMax(sensor,"humidity", decimalPlaces=0)
 
 			#self._finalizeStatesChanges()
 			
 			display = "--"
 			displayMode = self.devicesCopy[sensor].pluginProps["displayField"]
 			if displayMode == "TempHumidBaro":
-				display = "%.1f %s / %d%% / %d hPa" % (temp, self.plugin.unitsTemperature, humid, baro)
+				display = "%s %s / %d%% / %d hPa" % (self.temperatureToString(temp), self.plugin.unitsTemperature, humid, baro)
 			elif displayMode == "Temp":
-				display = "%.1f %s" % (temp, self.plugin.unitsTemperature)
+				display = "%s %s" % (self.temperatureToString(temp), self.plugin.unitsTemperature)
 			elif displayMode == "Barometer":
-				display = "%d hPa" % (temp, baro)		
+				display = "%d hPa" % (baro)		
 			elif displayMode == "Forecast":
 				display = "%s" % (forecast)							
 			elif displayMode == "TempMinMaxHumidBaro":
-				display = "%.1f %s (%.1f-%.1f) %d%% / %d hPa" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"), humid, baro)
+				display = "%s %s (%s-%s) %d%% / %d hPa" % ( self.temperatureToString(temp), self.plugin.unitsTemperature, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid, baro )
 			elif displayMode == "TempMinMax":
-				display = "%.1f %s (%.1f-%.1f)" % (temp, self.plugin.unitsTemperature, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"))
+				display = "%s %s (%s-%s)" % ( self.temperatureToString(temp), self.plugin.unitsTemperature, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")) )
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=display)
 
@@ -1739,13 +1759,13 @@ class RFXTRX(object):
 		self.plugin.debugLog(u"Wind sensor %d direction %d avgSpeed %.2f gust %.2f." % (sensor, direction, avgSpeed, gust))
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Wind sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"avgSpeed", value=avgSpeed)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"gust", value=gust)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"avgSpeed", value=avgSpeed, decimalPlaces = self.plugin.digitsWind)
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"gust", value=gust, decimalPlaces = self.plugin.digitsWind)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"directionDegrees", value=direction)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"directionText", value=self.convertDirectionDegreesToText(direction))
 			if (subtype == 4):
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=self.convertTemperatureToUnit(temp),decimalPlaces= 1)
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"windChill", value=self.convertTemperatureToUnit(chill))
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=self.convertTemperatureToUnit(temp), decimalPlaces= self.plugin.digitsTemperature)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"windChill", value=self.convertTemperatureToUnit(chill), decimalPlaces= self.plugin.digitsTemperature)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel", value=batteryLevel)
@@ -1754,13 +1774,13 @@ class RFXTRX(object):
 			display = "--"
 			displayMode = self.devicesCopy[sensor].pluginProps["displayField"]
 			if displayMode == "Speed":
-				display = "%d %s" % (avgSpeed, self.plugin.unitsWind)
+				display = "%s %s" % (self.windToString(avgSpeed), self.plugin.unitsWind)
 			elif displayMode == "SpeedDirection":
-				display = "%s at %d %s" % (self.convertDirectionDegreesToText(direction), avgSpeed, self.plugin.unitsWind)
+				display = "%s at %s %s" % (self.convertDirectionDegreesToText(direction), self.windToString(avgSpeed), self.plugin.unitsWind)
 			elif displayMode == "SpeedCompass":
-				display = "%d %s %s" % (avgSpeed, self.plugin.unitsWind, direction)
+				display = "%s %s %s" % (self.windToString(avgSpeed), self.plugin.unitsWind, direction)
 			elif displayMode == "SpeedGust":
-				display = "%d %s (%d %s)" % (avgSpeed, self.plugin.unitsWind, gust, self.plugin.unitsWind)
+				display = "%s %s (%s %s)" % (self.windToString(avgSpeed), self.plugin.unitsWind, self.windToString(gust), self.plugin.unitsWind)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=display)
 			#self._finalizeStatesChanges()
 		else:
@@ -1789,7 +1809,7 @@ class RFXTRX(object):
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)
 			#self._finalizeStatesChanges()
 
-			self.calcMinMax(sensor,"humidity",decimalPlaces=0)
+			self.calcMinMax(sensor,"humidity", decimalPlaces=0)
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=u"%d%%" % humid)
@@ -1823,19 +1843,19 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 			if subtype==3:
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=temp,decimalPlaces= 1)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value=temp, decimalPlaces= self.plugin.digitsTemperature)
 				#self._finalizeStatesChanges()
 
-				self.calcMinMax(sensor,"temperature",decimalPlaces=1)
+				self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
 			else:
 				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature", value="")
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"UVLevel", value=UVLevel,decimalPlaces= 1)		
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"UVLevel", value=UVLevel, decimalPlaces= 1)		
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel", value=batteryLevel)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)			
 			#self._finalizeStatesChanges()
 
-			self.calcMinMax(sensor,"UVLevel",decimalPlaces=1)
+			self.calcMinMax(sensor,"UVLevel", decimalPlaces=1)
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
@@ -1851,9 +1871,9 @@ class RFXTRX(object):
 			elif displayMode == "UvMaxTemp":
 				display = "%.1f (%.1f) / %d" % (UVLevel, float(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxUVLevel")), temp)
 			elif displayMode == "UvTempMinMax":
-				display = "%.1f / %d (%d - %d)" % (UVLevel, temp, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"))
+				display = "%.1f / %s (%d - %d)" % (UVLevel, self.temperatureToString(temp), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 			elif displayMode == "UvMinMaxTempMinMax":
-				display = "%.1f (%.1f) / %d (%d - %d)" % (UVLevel, float(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxUVLevel")), temp, self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature"), self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature"))				
+				display = "%.1f (%s) / %s (%s - %s)" % ( UVLevel, float(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxUVLevel")), self.temperatureToString(temp), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")), self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")) )
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=display)			
 			#self._finalizeStatesChanges()
 		else:
@@ -1873,9 +1893,9 @@ class RFXTRX(object):
 		self.plugin.debugLog(u"Current sensor %d now %.1f/%.1f/%.1f" % (sensor,Current1,Current2,Current3))
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Current sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh1", value= Current1,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh2", value= Current2,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh3", value= Current3,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh1", value= Current1, decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh2", value= Current2, decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"AmpCh3", value= Current3, decimalPlaces= 1)	
 
 			#self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel", value=batteryLevel)
@@ -1910,8 +1930,8 @@ class RFXTRX(object):
 		self.plugin.debugLog(u"Energy Usage sensor %d now %.1f(W)/Total %.1f (kWh)/" % (sensor,CurrentUsage,TotalkWh))
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Energy Usage sensor %d in list" % sensor)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"Watts",          value=CurrentUsage,decimalPlaces= 1)	
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"kWh",            value=TotalkWh,decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"Watts",          value=CurrentUsage, decimalPlaces= 1)	
+			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"kWh",            value=TotalkWh, decimalPlaces= 1)	
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel",   value=batteryLevel)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"signalStrength", value=signalStrength)			
@@ -2012,7 +2032,7 @@ class RFXTRX(object):
 			res = res + chr(int(s[realIdx:realIdx+2],16))
 		return res
 	
-	def calcMinMax(self,sensor,stateName,decimalPlaces=""):
+	def calcMinMax(self,sensor,stateName, decimalPlaces=""):
 		try:
 			minstateName = u"min"+stateName
 			maxstateName = u"max"+stateName
@@ -2025,15 +2045,15 @@ class RFXTRX(object):
 				if u"minYesterday"+stateName in dev.states:
 					#indigo.server.log(dev.name+" updating  min "+  stateName +"  "+str(self._getCurrentSensorValue(dev,minstateName)) )
 					#indigo.server.log(dev.name+" updating  max "+  stateName +"  "+str(self._getCurrentSensorValue(dev,maxstateName)) )
-					self._addToBatchStatesChange(dev, key=u"minYesterday"+stateName, value=float(self._getCurrentSensorValue(dev,minstateName)),decimalPlaces=decimalPlaces)
-					self._addToBatchStatesChange(dev, key=u"maxYesterday"+stateName, value=float(self._getCurrentSensorValue(dev,maxstateName)),decimalPlaces=decimalPlaces)
-				self._addToBatchStatesChange(dev, key=minstateName, value=lastValue,decimalPlaces=decimalPlaces)
-				self._addToBatchStatesChange(dev, key=maxstateName, value=lastValue,decimalPlaces=decimalPlaces)
+					self._addToBatchStatesChange(dev, key=u"minYesterday"+stateName, value=float(self._getCurrentSensorValue(dev,minstateName)), decimalPlaces=decimalPlaces)
+					self._addToBatchStatesChange(dev, key=u"maxYesterday"+stateName, value=float(self._getCurrentSensorValue(dev,maxstateName)), decimalPlaces=decimalPlaces)
+				self._addToBatchStatesChange(dev, key=minstateName, value=lastValue, decimalPlaces=decimalPlaces)
+				self._addToBatchStatesChange(dev, key=maxstateName, value=lastValue, decimalPlaces=decimalPlaces)
 			else:
 				if lastValue < float(self._getCurrentSensorValue(dev,minstateName)):
-					self._addToBatchStatesChange(dev, key=minstateName, value=lastValue,decimalPlaces=decimalPlaces)
+					self._addToBatchStatesChange(dev, key=minstateName, value=lastValue, decimalPlaces=decimalPlaces)
 				if lastValue > float(self._getCurrentSensorValue(dev,maxstateName)):
-					self._addToBatchStatesChange(dev, key=maxstateName, value=lastValue,decimalPlaces=decimalPlaces)
+					self._addToBatchStatesChange(dev, key=maxstateName, value=lastValue, decimalPlaces=decimalPlaces)
 		except:
 			self.plugin.debugLog(u"An error occured while setting the min/max values")
 			exc_type, exc_value, exc_traceback = sys.exc_info()		
@@ -2098,35 +2118,56 @@ class RFXTRX(object):
 			return "cloudy"
 		elif ord(data) == 4:
 			return "rain"			
+
+	def temperatureToString(self, xx):
+		if str(self.plugin.digitsTemperature) == "0":
+			cstring =  u"%d"
+		else:
+			cstring = u"%."+str(self.plugin.digitsTemperature)+"f" 
+		return cstring % (xx)
 			
+	def rainToString(self, xx):
+		if str(self.plugin.digitsRain) == "0":
+			cstring =  u"%d"
+		else:
+			cstring = u"%."+str(self.plugin.digitsRain)+"f" 
+		return cstring % (xx)
+
+	def windToString(self, xx):
+		if str(self.plugin.digitsWind) == "0":
+			cstring =  u"%d"
+		else:
+			cstring = u"%."+str(self.plugin.digitsWind)+"f" 
+		return cstring % (xx)
+
 	def convertTemperatureToUnit(self, data):
 		# Assumes data parameter supplied in Celsius
 		
 		if self.plugin.unitsTemperature == "F":
-			return (float(data)*1.8) + 32
+			return round((float(data)*1.8) + 32,self.plugin.digitsTemperature)
 		else: # unitsTemperature == "C"
-			return data
+			return round(data,self.plugin.digitsTemperature)
 
 	def convertTemperatureToC(self, data):
 		if self.plugin.unitsTemperature == "F":
-			return (float(data)-32)/1.8
+			return round((float(data)-32)/1.8,self.plugin.digitsTemperature)
 		else: # unitsTemperature == "C"
-			return data
+			return round(data,self.plugin.digitsTemperature)
 
 	def convertRainfallToUnits(self, data):
 		# Assumes data parameter supplied in millimeters
 		
 		if self.plugin.unitsRain == "in":
-			return round((float(data) / 25.4),2)
+			return round(float(data) / 25.4,self.plugin.digitsRain)
 		else: #unitsRainfall = "mm"
-			return data
+			return round(data,self.plugin.digitsRain)
 
 	def convertRainfallRateToUnits(self, data):
 		# Assumes data parameter supplied in millimeters / hour
 		if self.plugin.unitsRain == "in":
-			return round((float(data) / 25.4),2)
+			return round(float(data) / 25.4,self.plugin.digitsRain)
 		else: #unitsRainfall = "mm"
-			return data		
+			return round(data,self.plugin.digitsRain)	
 
 	def convertWindspeedToUnits(self, data):
 		# Assumes data parameter supplied in meters / second
@@ -2135,13 +2176,13 @@ class RFXTRX(object):
 		# mph
 		# kmph
 		if self.plugin.unitsWind == "kmph":
-			return round(float(data) * 3.6,1)
+			return round(float(data) * 3.6,self.plugin.digitsWind)
 		elif self.plugin.unitsWind == "mph":
-			return round(float(data) * 2.2369,1)
+			return round(float(data) * 2.2369,self.plugin.digitsWind)
 		elif self.plugin.unitsWind == "knots":
-			return round(float(data) * 1.9438,1)
+			return round(float(data) * 1.9438,self.plugin.digitsWind)
 		else: #unitsWind == "mps"
-			return data
+			return round(data,self.plugin.digitsWind)
 
 	def convertDirectionDegreesToText(self, data):
 		#N	348.76	11.25
@@ -2269,7 +2310,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2278,7 +2319,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2287,7 +2328,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2338,7 +2379,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2353,7 +2394,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2363,7 +2404,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding ARC Switch (KaKu with wheels) %s (%s)." % (adres,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2373,7 +2414,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding RollerTrol Remote %s (%s)." % (adres,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2383,7 +2424,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2393,7 +2434,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding X10 Switch %s (%s)." % (adres,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2404,7 +2445,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding AC Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2415,7 +2456,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding LightWave Switch housecode %s and unitcode %s (%s)." % (adres,unitcode,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2425,7 +2466,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding LightWave Remote housecode %s (%s)." % (adres,sensor))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2435,7 +2476,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding PCRemote %s." % (adres))			
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2444,7 +2485,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2453,7 +2494,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding RFXSensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2462,7 +2503,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding RFXMeter %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2471,7 +2512,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding UV Meter %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2480,7 +2521,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding ELEC1 Current Sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2489,7 +2530,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding ELEC2 Energy Usage Sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
@@ -2498,7 +2539,7 @@ class RFXTRX(object):
 			if not force:
 				self.plugin.debugLog(u"Adding Wind Sensor %s." % sensor)
 			else:
-				del self.devicesCopy[sensor]
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev	
@@ -2511,7 +2552,7 @@ class RFXTRX(object):
 	def deviceStop(self, dev):
 		try:
 			sensor = int(dev.pluginProps['sensorNumber'])
-			del self.devicesCopy[sensor]
+			if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
 			if dev.deviceTypeId == u'Temperature':
 				dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
 			
