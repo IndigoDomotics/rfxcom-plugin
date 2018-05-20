@@ -38,11 +38,27 @@
 			<Option value="F">F</Option>
 		</List>
 	</Field>
+	<Field id="digitsTemperature" type="Menu" defaultValue="1">
+		<Label>digits For Temperature: </Label>
+		<List>
+			<Option value="0">0</Option>
+			<Option value="1">1</Option>
+			<Option value="2">2</Option>
+		</List>
+	</Field>
 	<Field id="unitsRain" type="Menu" defaultValue="mm">
 		<Label>Rainfall: </Label>
 		<List>
 			<Option value="mm">mm</Option>
 			<Option value="in">in</Option>
+		</List>
+	</Field>
+	<Field id="digitsRain" type="Menu" defaultValue="1">
+		<Label>digits For Rainfall: </Label>
+		<List>
+			<Option value="0">0</Option>
+			<Option value="1">1</Option>
+			<Option value="2">2</Option>
 		</List>
 	</Field>
 	<Field id="unitsWind" type="Menu" defaultValue="mps">
@@ -54,6 +70,14 @@
 			<Option value="knots">knots</Option>
 		</List>
 	</Field>		
+	<Field id="digitsWind" type="Menu" defaultValue="0">
+		<Label>digits For Wind: </Label>
+		<List>
+			<Option value="0">0</Option>
+			<Option value="1">1</Option>
+			<Option value="2">2</Option>
+		</List>
+	</Field>
 
 	<Field id="simpleSeparator3" type="separator"/>
 
