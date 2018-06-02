@@ -1511,7 +1511,7 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Temp sensor %d in list" % sensor)
 			
-			if self.devicesCopy[sensor].pluginProps['MultiplyBatteryLevel']:
+			if 'MultiplyBatteryLevel' in self.devicesCopy[sensor].pluginProps and self.devicesCopy[sensor].pluginProps['MultiplyBatteryLevel']:
 				batteryLevel *= 10
 				if batteryLevel > 100:
 					batteryLevel = 100	
