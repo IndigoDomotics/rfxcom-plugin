@@ -1324,6 +1324,7 @@ class RFXTRX(object):
 		subtype    = ord(data[2])
 		sensor     = ord(data[4])
 		svalue     = (ord(data[5])*256)+ord(data[6])
+		tUnits     =  self.plugin.unitsTemperature
 		self.plugin.debugLog(u"RFXSensor %d with subtype %d and value %d" % (sensor,subtype,svalue))
 		self.plugin.debugLog(u"Data1: %s %s %s %s %s %s %s %s"% (ord(data[0]),ord(data[1]),ord(data[2]),ord(data[3]),ord(data[4]),ord(data[5]),ord(data[6]),ord(data[7 ])))
 		if sensor in self.devicesCopy.keys():
@@ -1517,8 +1518,9 @@ class RFXTRX(object):
 					batteryLevel = 100	
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"temperature",    value = temp,       decimalPlaces= self.plugin.digitsTemperature) 
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidity",       value=humid,        decimalPlaces= 0)
-			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidityStatus", value=humidityStatus)
+			if "humidity" in self.devicesCopy[sensor].states:
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidity",       value=humid,        decimalPlaces= 0)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"humidityStatus", value=humidityStatus)
 
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type",           value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"batteryLevel",   value=batteryLevel)
@@ -1526,7 +1528,8 @@ class RFXTRX(object):
 			#self._finalizeStatesChanges()
 
 			self.calcMinMax(sensor,"temperature", decimalPlaces=self.plugin.digitsTemperature)
-			self.calcMinMax(sensor,"humidity",   decimalPlaces=0)
+			if "humidity" in self.devicesCopy[sensor].states:
+				self.calcMinMax(sensor,"humidity",   decimalPlaces=0)
 
 			#self._finalizeStatesChanges()
 			
@@ -1543,8 +1546,11 @@ class RFXTRX(object):
 			elif displayMode == "TempMinMax":
 				display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), tUnits, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 
-			if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
+			if "sensorValueType" in self.devicesCopy[sensor].pluginProps["sensorValueType"]:
+				if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
+				else: #Temperature
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
 			else: #Temperature
 				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
 				
