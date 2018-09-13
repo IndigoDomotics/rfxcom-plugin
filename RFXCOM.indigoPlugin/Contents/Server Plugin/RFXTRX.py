@@ -1414,7 +1414,7 @@ class RFXTRX(object):
 				elif displayMode == "TempMinMax":
 					display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), self.plugin.unitsTemperature, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 
-				if "sensorValueType" in self.devicesCopy[sensor].pluginProps["sensorValueType"]:
+				if "sensorValueType" in self.devicesCopy[sensor].pluginProps:
 					if "sensorValueType" in self.devicesCopy[sensor].pluginProps and self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
 						self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
 					else: #Temperature
