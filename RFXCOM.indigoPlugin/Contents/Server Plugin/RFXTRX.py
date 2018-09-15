@@ -89,7 +89,7 @@ class RFXTRX(object):
 			if decimalPlaces ==0:
 			    ap["value"] = int(float(value)) # make it integer  eg "10" not "10."
 			else:
-				ap["decimalPlaces"] = decimalPlaces
+				ap["decimalPlaces"] = int(decimalPlaces)
 		if uiValue != "":
 			ap["uiValue"] = uiValue 
 			
@@ -1324,7 +1324,9 @@ class RFXTRX(object):
 		subtype    = ord(data[2])
 		sensor     = ord(data[4])
 		svalue     = (ord(data[5])*256)+ord(data[6])
-		tUnits     =  self.plugin.unitsTemperature
+		humid      = 0
+		temp       = 0
+
 		self.plugin.debugLog(u"RFXSensor %d with subtype %d and value %d" % (sensor,subtype,svalue))
 		self.plugin.debugLog(u"Data1: %s %s %s %s %s %s %s %s"% (ord(data[0]),ord(data[1]),ord(data[2]),ord(data[3]),ord(data[4]),ord(data[5]),ord(data[6]),ord(data[7 ])))
 		if sensor in self.devicesCopy.keys():
@@ -1404,18 +1406,21 @@ class RFXTRX(object):
 				display = "--"
 				displayMode = dev.pluginProps["displayField"]
 				if displayMode == "TempHumid":
-					display = u"%s °%s / %d%%" % (self.temperatureToString(temp), tUnits, humid)
+					display = u"%s °%s / %d%%" % (self.temperatureToString(temp), self.plugin.unitsTemperature, humid)
 				elif displayMode == "Temp":
-					display = u"%s °%s" % (self.temperatureToString(temp), tUnits)
+					display = u"%s °%s" % (self.temperatureToString(temp), self.plugin.unitsTemperature)
 				elif displayMode == "TempMinMaxHumid":
-					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), tUnits,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
+					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), self.plugin.unitsTemperature,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
 				elif displayMode == "TempMinMax":
-					display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), tUnits, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
+					display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), self.plugin.unitsTemperature, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 
-				if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
-					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
+				if "sensorValueType" in self.devicesCopy[sensor].pluginProps:
+					if "sensorValueType" in self.devicesCopy[sensor].pluginProps and self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
+						self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
+					else: #Temperature
+						self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= self.plugin.digitsTemperature, uiValue=display)
 				else: #Temperature
-					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= self.plugin.digitsTemperature, uiValue=display)
 
 			#self._finalizeStatesChanges()
 			else:
@@ -1491,7 +1496,7 @@ class RFXTRX(object):
 		temp+=(temp2*256) 
 		temp = temp*vFactor*0.1
 		
-		temp = self.convertTemperatureToUnit(temp)
+		temp  = self.convertTemperatureToUnit(temp)
 		humid = 0
 		humidityStatus = ""
 		batteryAndSignalData = 0
@@ -1535,24 +1540,22 @@ class RFXTRX(object):
 			
 			display         = "--"
 			displayMode     = self.devicesCopy[sensor].pluginProps["displayField"]
-			tDigits         = str(self.plugin.digitsTemperature)
-			tUnits          =  self.plugin.unitsTemperature
 			if displayMode == "TempHumid":
-				display = u"%s °%s / %d%%" % (self.temperatureToString(temp), tUnits, humid)
+				display = u"%s °%s / %d%%" % (self.temperatureToString(temp), self.plugin.unitsTemperature, humid)
 			elif displayMode == "Temp":
-				display = u"%s °%s" % (self.temperatureToString(temp), tUnits)
+				display = u"%s °%s" % (self.temperatureToString(temp), self.plugin.unitsTemperature)
 			elif displayMode == "TempMinMaxHumid":
-					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), tUnits,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
+					display = u"%s °%s (%s-%s) %d%%" % ( self.temperatureToString(temp), self.plugin.unitsTemperature,  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")), humid)
 			elif displayMode == "TempMinMax":
-				display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), tUnits, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
+				display = u"%s °%s (%s-%s)" % ( self.temperatureToString(temp), self.plugin.unitsTemperature, self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"mintemperature")),  self.temperatureToString(self._getCurrentSensorValue(self.devicesCopy[sensor],"maxtemperature")))
 
 			if "sensorValueType" in self.devicesCopy[sensor].pluginProps["sensorValueType"]:
 				if self.devicesCopy[sensor].pluginProps["sensorValueType"] == "Humid":
 					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=humid, decimalPlaces= 0, uiValue=display)
 				else: #Temperature
-					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
+					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= self.plugin.digitsTemperature, uiValue=display)
 			else: #Temperature
-				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= tDigits, uiValue=display)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= self.plugin.digitsTemperature, uiValue=display)
 				
 				
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
@@ -2126,7 +2129,7 @@ class RFXTRX(object):
 			return "rain"			
 
 	def temperatureToString(self, xx):
-		if str(self.plugin.digitsTemperature) == "0":
+		if self.plugin.digitsTemperature == "0":
 			cstring =  u"%d"
 		else:
 			cstring = u"%."+str(self.plugin.digitsTemperature)+"f" 
@@ -2301,12 +2304,14 @@ class RFXTRX(object):
 
 	########################################
 	# Device Start / Stop Subs
-	def deviceStart(self, dev, force = False):
+	def deviceStart(self, dev, force = True):
 		if not force: self.plugin.debugLog(u"deviceStart called. Adding device %s, type: %s" % (dev.name,dev.deviceTypeId))
 
 		if self.pluginState == "init":
 			dev.stateListOrDisplayStateIdChanged()  # update  from device.xml info if changed
 
+		## always update sensor 
+		force = True
 		
 		needToSavePlugInProps = False
 		localProps = dev.pluginProps
