@@ -1423,8 +1423,8 @@ class RFXTRX(object):
 					self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"display", value=temp,  decimalPlaces= self.plugin.digitsTemperature, uiValue=display)
 
 			#self._finalizeStatesChanges()
-			else:
-				self.handleUnknownDevice(devicetype,sensor)
+		else:
+			self.handleUnknownDevice(devicetype,sensor)
 
 	def handleRFXMeter(self,data):
 		devicetype = ord(data[1])
