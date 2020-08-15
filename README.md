@@ -39,11 +39,23 @@ Log Should an Unknown Device Error Msg: (like below)
  RFXCOM Error                    unknown device detected (type = 25). Select a BlindsT1234 Device from the list of devices
  RFXCOM Error                    HouseCode (hex)=293301 ,subtype (int)=6 ,unitCode (int)=145
 
-![](https://github.com/Ghawken/rfxcom-plugin/blob/master/RFXCOM-Plugin-Glenn.indigoPlugin/Contents/Resources/AlarmSensors.png?raw=true)
+![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/LogUnknownDevice.png?raw=true)
+
+
+Create a RFXCOM BlindsT1234 Device Adding these Details  (demo image = not the same details!)
+
+![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/blindsT1234Device.png?raw=true)
+
+
+Functions:
+Turn On and Turn Off - will open close Blinds (and update Device State)
+Remote will likewise turn on/turn off and the State will be updated in Indigo
+Also will show last command/last time updated in device states:
+
+![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/deviceStates.png?raw=true)
 
 
 
-Create a RFXCOM BlindsT1234 Device Adding these Details
 
 
 
