@@ -125,7 +125,42 @@
 		</ConfigUI>
 		<States>
 		</States>
-	</Device>		
+	</Device>
+
+	<Device type="relay" id="BlindsT1234">
+		<Name>BlindsT1234</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode:</Label>
+			</Field>
+			<Field id="subtype" type="textfield" defaultValue="6">
+				<Label>Subtype (format 0-16):</Label>
+			</Field>
+		</ConfigUI>
+					<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+		</States>
+
+
+	</Device>
 
 	<Device type="relay" id="Brel">
 		<Name>Brel</Name>

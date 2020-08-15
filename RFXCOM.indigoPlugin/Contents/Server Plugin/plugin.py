@@ -166,7 +166,6 @@ class Plugin(indigo.PluginBase):
 			if sendSuccess:			
 				# If success then log that the command was successfully sent.
 				self.debugLog(u"sent \"%s\" %s" % (dev.name, "on"))
-                
 				# And then tell the Indigo Server to update the state.
 				dev.updateStateOnServer("onOffState", True)
 			else:
