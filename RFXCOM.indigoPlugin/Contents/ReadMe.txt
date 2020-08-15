@@ -1,8 +1,7 @@
-Changelog
 
-Some updates to Plugin by GlennNZ
 
-2.2.0
+
+
 
 
 

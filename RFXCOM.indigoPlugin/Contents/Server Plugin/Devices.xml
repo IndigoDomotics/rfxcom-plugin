@@ -131,13 +131,13 @@
 		<Name>BlindsT1234</Name>
 		<ConfigUI>
 			<Field id="address" type="textfield" defaultValue="000000">
-				<Label>Housecode (format FFFFFF):</Label>
+				<Label>Housecode (Hex format FFFFFF):</Label>
 			</Field>
 			<Field id="unit" type="textfield" defaultValue="1">
-				<Label>Unitcode:</Label>
+				<Label>Unitcode: (int) </Label>
 			</Field>
 			<Field id="subtype" type="textfield" defaultValue="6">
-				<Label>Subtype (format 0-16):</Label>
+				<Label>Subtype (int 0-16):</Label>
 			</Field>
 		</ConfigUI>
 					<UiDisplayStateId>command</UiDisplayStateId>
