@@ -10,7 +10,7 @@ large number of protocols. See also
 
 Some updates to Plugin by GlennNZ
 
-2.2.1
+#### 2.2.1
 
 Add new device type BlindsT1234 for all type=25 Blinds
 
@@ -26,7 +26,7 @@ Add subtype to device Def (should allow other blinds to be controlled)
 
 Add last Command received to device State, lastupdated and type
 
-##### **Preferred Usage:**
+### **Preferred Usage:**
 
 1. Install, setup Physical Blind, setup working Remote for Blind.
 2. Update RFXCOM Plugin (this Plugin) to latest version on github
@@ -35,9 +35,11 @@ Add last Command received to device State, lastupdated and type
 
 5. Press Remote Button on your Blind Remote
 
-Log Should an Unknown Device Error Msg: (like below)
- RFXCOM Error                    unknown device detected (type = 25). Select a BlindsT1234 Device from the list of devices
- RFXCOM Error                    HouseCode (hex)=293301 ,subtype (int)=6 ,unitCode (int)=145
+Log Should show an Unknown Device Error Msg: (like below)
+
+`RFXCOM Error unknown device detected (type = 25). Select a BlindsT1234 Device from the list of devices
+ RFXCOM Error HouseCode (hex)=293301 ,subtype (int)=6 ,unitCode (int)=145`
+
 
 ![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/LogUnknownDevice.png?raw=true)
 
@@ -47,9 +49,12 @@ Create a RFXCOM BlindsT1234 Device Adding these Details  (demo image = not the s
 ![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/blindsT1234Device.png?raw=true)
 
 
-Functions:
+####Functions:
+
 Turn On and Turn Off - will open close Blinds (and update Device State)
+
 Remote will likewise turn on/turn off and the State will be updated in Indigo
+
 Also will show last command/last time updated in device states:
 
 ![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/deviceStates.png?raw=true)
@@ -57,7 +62,7 @@ Also will show last command/last time updated in device states:
 
 
 
-
+------------------------------------------------------------------
 
 Downloading for use
 -------------------
