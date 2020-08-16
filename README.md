@@ -9,6 +9,20 @@ large number of protocols. See also
 #### Changelog
 
 Some updates to Plugin by GlennNZ
+
+#### 2.2.3
+Add blindState to BlindsT1234 device - Open/Closed/or Partial 
+![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/DeviceStatesUpdate.png?raw=true)
+
+
+Update lastcommand and lastUpdate to include both remote commands, but also Sent commands
+Below for Subtype=3 Motorlux Blinds ONLY:
+- Add warning message for Blinds subtype=3 may not receive unitcode and will need to be entered for control manually
+- Because all unitcodes are sent as 1, any same physical remote devices with different unitcodes/channels will be updated together incorrectly)
+- Ideally in this scenario should use a different physical remote for groups of blinds wish to control/be correctly updated in Indigo
+
+
+
 #### 2.2.2
 Add action Groups Open/Close/Stop/Program/Limit for all BlindsT1234 devices
 (obviously all may not work correctly on all devices - but option exists)
@@ -64,7 +78,7 @@ Blind Remote will likewise open/close blind and the State will be updated in Ind
 Also will show last command/last time remote command received in device states:
 (eg. can trigger one blind to control others etc)
 
-![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/deviceStates.png?raw=true)
+![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/DeviceStatesUpdate.png?raw=true)
 
 
 

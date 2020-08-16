@@ -524,7 +524,6 @@ class RFXTRX(object):
 					adres3 = int(dev.pluginProps['address'][4:6],16)
 					subtype = chr(int(dev.pluginProps['subtype']))
 					## use subtype in device Device will enable wider support
-
 					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
 					self.plugin.debugLog(u"Unit:%s" % dev.pluginProps['unit'])
 					self.plugin.debugLog(u"Address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
@@ -534,6 +533,20 @@ class RFXTRX(object):
 					#devtype = chr(self.ReturnLightType(action, dev))
 					level=int(round(BrightLevel/3.23))
 					self.plugin.debugLog("device level:%s" % (level))
+					## update indigo device state - otherwise when action called no state changes
+					## presume successful state
+					if command == "Off":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=True)
+						self._addToBatchStatesChange(dev, key="blindState", value="Open")
+					elif command == "On":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
+						self._addToBatchStatesChange(dev, key="blindState", value="Closed")
+					elif command == "Stop":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
+						self._addToBatchStatesChange(dev, key="blindState", value="Partial")
+					#self._addToBatchStatesChange(dev, key=u"type", value=subtype)
+					self._addToBatchStatesChange(dev, key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+					self._addToBatchStatesChange(dev, key=u"command", value=command)
 					packdata = chr(0x19)+subtype+chr(0x00)+chr(adres1)+chr(adres2)+chr(adres3)+housecode+commcode+chr(0x00)
 					self.logdata(packdata,"PackData:=")
 				elif (dev.deviceTypeId=="Somfy"):
@@ -782,7 +795,7 @@ class RFXTRX(object):
 				#self.triggerRollerTrolRemote(data)
 				self.triggerBlindsRemote(data)
 			elif ord(data[1])==32:
-				self.handleSecurity(data)				
+				self.handlSecurity(data)
 			elif ord(data[1])==48:
 				self.triggerPCRemote(data)
 			elif ord(data[1])==87:
@@ -1183,10 +1196,15 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Switch Command %s in list, command=%s" % (sensor,commando))
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"command", value=commando)
-			if commcode==1:
+			if commcode== 0:
 				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=True)
-			elif commcode ==0:
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Open")
+			elif commcode == 1 :
 				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=False)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Closed")
+			elif commcode == 2:
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=False)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Partial")
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
@@ -2052,9 +2070,12 @@ class RFXTRX(object):
 				subtype = int(ord(sensorid[2]))
 				adres = ord(sensorid[7])
 				hexhouse = ''.join(["%02X" % ord(char) for char in sensorid[4:7]]).strip()
-				self.plugin.errorLog(u"unknown device detected (type = %d). Select a %s from the list of devices" % (devicetype,devicetext))
+				self.plugin.errorLog(u"Unknown device detected (type = %d). Select a %s from the list of devices" % (devicetype,devicetext))
 				self.plugin.errorLog(u"HouseCode (hex)=" + unicode(hexhouse)+ u' ,subtype (int)=' + unicode(subtype) + u' ,unitCode (int)=' + unicode(int(adres)))
-			
+				if subtype == 3:
+					self.plugin.errorLog(u"For SubType 3 Blinds, the multichannel remotes and the unitcode may not be correctly received.")
+					self.plugin.errorLog(u"Commands can still be transmitted, by entering the correct unit code. ")
+					self.plugin.errorLog(u"Created devices may not be correctly updated as distinguishing units is not possible")
 	def logdata(self,packdata,debugstr):
 		if packdata is None:
 			self.plugin.debugLog(u"%s: none" % (debugstr))	
