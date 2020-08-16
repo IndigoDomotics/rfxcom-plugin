@@ -36,7 +36,8 @@ Add new device type BlindsT1234 for all type=25 Blinds
 (should replace A-OK AC114, Brel, and others, these others left alone so can update as wanted)
 
 Adds Support for Dooya Blinds and Remotes  (Receive Remote commands and send commands)
-Adds Support for Silent Glass Blinds  (Receive Remote commands and send commands)
+Adds Support for SilentGliss Blinds  (Receive Remote commands and send commands)
+Adds Support for Motorlux Subtype=3 Blinds - NB: no unitcodes received, see details in Commit 2.2.3
 
 Correctly shows Housecode, unitcode and subtype for ALL these Blinds Remotes
 
