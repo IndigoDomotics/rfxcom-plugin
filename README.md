@@ -9,14 +9,20 @@ large number of protocols. See also
 #### Changelog
 
 Some updates to Plugin by GlennNZ
+#### 2.2.2
+Add action Groups Open/Close/Stop/Program/Limit for all BlindsT1234 devices
+(obviously all may not work correctly on all devices - but option exists)
+
 
 #### 2.2.1
+August 2020
 
 Add new device type BlindsT1234 for all type=25 Blinds
 
-(replacing A-OK AC114, Brel, and others, these others left alone so can update as wanted)
+(should replace A-OK AC114, Brel, and others, these others left alone so can update as wanted)
 
-Adds Support for Dooya Blinds and Remotes
+Adds Support for Dooya Blinds and Remotes  (Receive Remote commands and send commands)
+Adds Support for Silent Glass Blinds  (Receive Remote commands and send commands)
 
 Correctly shows Housecode, unitcode and subtype for ALL these Blinds Remotes
 
@@ -51,11 +57,12 @@ Create a RFXCOM BlindsT1234 Device Adding these Details  (demo image = not the s
 
 ####Functions:
 
-Turn On and Turn Off - will open close Blinds (and update Device State)
+Turn On and Turn Off - will open or close Blinds (and update Device State)
 
-Remote will likewise turn on/turn off and the State will be updated in Indigo
+Blind Remote will likewise open/close blind and the State will be updated in Indigo
 
-Also will show last command/last time updated in device states:
+Also will show last command/last time remote command received in device states:
+(eg. can trigger one blind to control others etc)
 
 ![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/deviceStates.png?raw=true)
 

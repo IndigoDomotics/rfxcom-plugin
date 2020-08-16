@@ -39,8 +39,28 @@
 	<Action id="programA-OK_RF01Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_RF01">
 		<Name>Program A-OK_RF01</Name>
 		<CallbackMethod>programRelay</CallbackMethod>
-	</Action>	
-	
+	</Action>
+
+	<Action id="openBlindsT1234" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.BlindsT1234">
+		<Name>Open BlindsT1234</Name>
+		<CallbackMethod>openRelay</CallbackMethod>
+	</Action>
+	<Action id="stopBlindsT1234" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.BlindsT1234">
+		<Name>Stop BlindsT1234</Name>
+		<CallbackMethod>stopRelay</CallbackMethod>
+	</Action>
+	<Action id="closeBlindsT1234" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.BlindsT1234">
+		<Name>Close BlindsT1234</Name>
+		<CallbackMethod>closeRelay</CallbackMethod>
+	</Action>
+	<Action id="programBlindsT1234" deviceFilter="nl.rjdekok.indigoplugin.BlindsT1234">
+		<Name>Program BlindsT1234</Name>
+		<CallbackMethod>programRelay</CallbackMethod>
+	</Action>
+		<Action id="limitBlindsT1234" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.BlindsT1234">
+		<Name>Limit BlindsT1234</Name>
+		<CallbackMethod>limitRelay</CallbackMethod>
+	</Action>
 	<Action id="openA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
 		<Name>Open A-OK_AC114</Name>
 		<CallbackMethod>openRelay</CallbackMethod>
@@ -56,7 +76,8 @@
 	<Action id="programA-OK_AC114Relay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.A-OK_AC114">
 		<Name>Program A-OK_AC114</Name>
 		<CallbackMethod>programRelay</CallbackMethod>
-	</Action>	
+	</Action>
+
 	
 	<Action id="openBrelRelay" deviceFilter="nl.rjdekok.indigoplugin.RFXCOM.Brel">
 		<Name>Open Brel</Name>

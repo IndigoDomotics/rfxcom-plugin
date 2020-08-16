@@ -526,11 +526,11 @@ class RFXTRX(object):
 					## use subtype in device Device will enable wider support
 
 					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
-					self.plugin.debugLog("housecode:%s" % dev.pluginProps['unit'])
-					self.plugin.debugLog(u"address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
+					self.plugin.debugLog(u"Unit:%s" % dev.pluginProps['unit'])
+					self.plugin.debugLog(u"Address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
 					housecode = chr(int(dev.pluginProps['unit']))
 					self.plugin.debugLog("device type:%s" % dev.deviceTypeId)
-					self.plugin.debugLog("device subtype:%s / Command:%s" % (self.ReturnLightType(action, dev),command))
+					self.plugin.debugLog("device subtype:%s / Command:%s" % (subtype,command))
 					#devtype = chr(self.ReturnLightType(action, dev))
 					level=int(round(BrightLevel/3.23))
 					self.plugin.debugLog("device level:%s" % (level))
@@ -1161,16 +1161,13 @@ class RFXTRX(object):
 		housecode=(ord(data[4])*10000)+(ord(data[5])*100)+ord(data[6])
 		adres=ord(data[7])
 		sensor = int((ord(data[4])*1000000)+(ord(data[5])*10000)+(ord(data[6])*100)+ord(data[7]))
+		#sensor = int((adres1 * 1000000) + (adres2 * 10000) + (adres3 * 100) + housecode)
 		commcode=ord(data[8])
  		self.plugin.debugLog(u"Blinds Remote with id1-3 %s and unitcode %s command %s received" % (housecode, adres, commcode))
 		self.plugin.debugLog(u"Blinds Remote with subtype %s and sensor %s received" % (subtype, sensor))
-
 		hexhouse = ''.join(["%02X" % ord(char) for char in data[4:7]]).strip()
 		subtype = int(subtype)
-		self.plugin.debugLog(u"HouseCode:"+unicode(hexhouse))
-		self.plugin.debugLog(u'Subtype:'+unicode(subtype))
-		self.plugin.debugLog(u'UnitCode:'+unicode(int(adres)))
-
+		self.plugin.debugLog(u"Enter the below into Device Details:  HouseCode (hex):"+unicode(hexhouse) + u', Subtype (int):'+unicode(subtype)+ u'& UnitCode (int):'+unicode(int(adres)))
 		if commcode==0:
 			commando = "Open"
 		elif commcode==1:
@@ -2491,7 +2488,7 @@ class RFXTRX(object):
 			adres2 = int(dev.pluginProps['address'][2:4], 16)
 			adres3 = int(dev.pluginProps['address'][4:6], 16)
 			housecode = int(dev.pluginProps['unit'])
-			self.plugin.debugLog(u'address1,2,3,house = %s , %s , %s , %s ' % (adres1, adres2,adres3,housecode))
+			self.plugin.debugLog(u'address1,2,3,unitcode = %s , %s , %s , %s ' % (adres1, adres2,adres3,housecode))
 
 			sensor = int( (adres1 * 1000000) + (adres2 * 10000) + (adres3 * 100) + housecode )
 			#sensor = (ord(adres[0])*100)+int(adres[1:3])
@@ -2502,6 +2499,7 @@ class RFXTRX(object):
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
+
 		elif dev.deviceTypeId == u'X10Switch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
