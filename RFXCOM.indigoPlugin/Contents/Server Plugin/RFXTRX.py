@@ -795,7 +795,7 @@ class RFXTRX(object):
 				#self.triggerRollerTrolRemote(data)
 				self.triggerBlindsRemote(data)
 			elif ord(data[1])==32:
-				self.handlSecurity(data)
+				self.handleSecurity(data)
 			elif ord(data[1])==48:
 				self.triggerPCRemote(data)
 			elif ord(data[1])==87:
