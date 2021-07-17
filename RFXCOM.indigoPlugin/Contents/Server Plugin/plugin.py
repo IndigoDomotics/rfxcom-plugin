@@ -219,6 +219,15 @@ class Plugin(indigo.PluginBase):
         
 		###### SET BRIGHTNESS ######
 		elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
+			if (dev.deviceTypeId == "BlindsT1234"):
+				ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
+				if ignoreDimmer:
+					self.debugLog(u"IgnoreDimmer set within Device.  Turning On/Off with Brightness")
+					if action.actionValue > 0:
+						action.actionValue = 100
+					elif action.actionValue == 0:
+						action.actionValue = 0
+
 			if self.RFXTRX.SetBrightLevel(action, dev, action.actionValue) == True:
 				sendSuccess = True		# Set to False if it failed.
 			newBrightness = action.actionValue

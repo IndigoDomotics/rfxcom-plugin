@@ -526,15 +526,18 @@ class RFXTRX(object):
 					ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
 					if ignoreDimmer:
 						self.plugin.debugLog(u"ignoreDimmer set within Device.  Turning On/Off with Brightness")
-						if BrightLevel>0:
-							command = "On"
-						elif BrightLevel==0:
-							command = "Off"
+						if command == "Brightness" or command == "Bright":
+							if BrightLevel>0:
+								command = "On"
+								commcode = chr(0x01)
+							elif BrightLevel==0:
+								command = "Off"
+								commcode = chr(0x00)
 					## use subtype in device Device will enable wider support
 					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
 					self.plugin.debugLog(u"Unit:%s" % dev.pluginProps['unit'])
 					self.plugin.debugLog(u"Address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
-					self.plugin.debugLog(u"Ignore Dimmer:"+unicode(ignoreDimmer))
+					#self.plugin.debugLog(u"Ignore Dimmer:"+unicode(ignoreDimmer))
 					housecode = chr(int(dev.pluginProps['unit']))
 					self.plugin.debugLog("device type:%s" % dev.deviceTypeId)
 					self.plugin.debugLog("device subtype:%s / Command:%s" % (subtype,command))
@@ -546,9 +549,11 @@ class RFXTRX(object):
 					if command == "Off":
 						self._addToBatchStatesChange(dev, key=u"onOffState", value=True)
 						self._addToBatchStatesChange(dev, key="blindState", value="Open")
+						#self._addToBatchStatesChange(dev, key="brightnessLevel", value=0)
 					elif command == "On":
 						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
 						self._addToBatchStatesChange(dev, key="blindState", value="Closed")
+						#self._addToBatchStatesChange(dev, key="brightnessLevel", value=100)
 					elif command == "Stop":
 						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
 						self._addToBatchStatesChange(dev, key="blindState", value="Partial")
