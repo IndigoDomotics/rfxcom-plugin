@@ -127,7 +127,7 @@
 		</States>
 	</Device>
 
-	<Device type="relay" id="BlindsT1234">
+	<Device type="dimmer" id="BlindsT1234">
 		<Name>BlindsT1234</Name>
 		<ConfigUI>
 			<Field id="address" type="textfield" defaultValue="000000">

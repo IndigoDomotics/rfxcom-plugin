@@ -38,8 +38,16 @@ class Plugin(indigo.PluginBase):
     
 	######################
 	def deviceStartComm(self, dev):
-		self.debugLog(u"<<-- entering deviceStartComm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))
-		self.RFXTRX.deviceStart(dev)
+		self.debugLog(u"<<-- entering Comm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))
+		##  Change BlindsT1234 to Dimmers here
+		if dev.deviceTypeId=="BlindsT1234":
+			if hasattr(dev, 'brightness') == False:  ## Not a dimmer, convert..
+				self.logger.debug("onState Not in Props converting device..")
+				device = indigo.device.changeDeviceTypeId(dev, dev.deviceTypeId)
+				device.replaceOnServer()
+				self.RFXTRX.deviceStart(device)
+		else:
+			self.RFXTRX.deviceStart(dev)
     
 	def deviceStopComm(self, dev):
 		self.debugLog(u"<<-- entering deviceStopComm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))

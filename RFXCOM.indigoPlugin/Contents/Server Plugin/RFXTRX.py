@@ -2502,6 +2502,7 @@ class RFXTRX(object):
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
 		elif dev.deviceTypeId == u'BlindsT1234':
+
 			adres = dev.pluginProps['address']
 			subtype = chr(int(dev.pluginProps['subtype']))
 			unit = dev.pluginProps['unit']
