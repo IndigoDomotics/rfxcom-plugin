@@ -524,15 +524,39 @@ class RFXTRX(object):
 					adres3 = int(dev.pluginProps['address'][4:6],16)
 					subtype = chr(int(dev.pluginProps['subtype']))
 					ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
+					reverseActions = bool(dev.pluginProps['reverseActions'])
 					if ignoreDimmer:
 						self.plugin.debugLog(u"ignoreDimmer set within Device.  Turning On/Off with Brightness")
 						if command == "Brightness" or command == "Bright":
-							if BrightLevel>0:
-								command = "On"
-								commcode = chr(0x01)
-							elif BrightLevel==0:
+							if reverseActions== False:
+								if BrightLevel>0:
+									command = "On"
+									commcode = chr(0x01)
+								elif BrightLevel==0:
+									command = "Off"
+									commcode = chr(0x00)
+					if reverseActions:
+						if command == "Brightness":
+							if BrightLevel > 0:
 								command = "Off"
 								commcode = chr(0x00)
+							elif BrightLevel == 0:
+								command = "On"
+								commcode = chr(0x01)
+						elif command == "Bright":
+							if BrightLevel > 0:
+								command = "Off"
+								commcode = chr(0x00)
+							elif BrightLevel == 0:
+								command = "On"
+								commcode = chr(0x01)
+						elif command == "Off":
+							command = "On"
+							commcode = chr(0x01)
+						elif command == "On":
+							command = "Off"
+							commcode = chr(0x00)
+
 					## use subtype in device Device will enable wider support
 					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
 					self.plugin.debugLog(u"Unit:%s" % dev.pluginProps['unit'])

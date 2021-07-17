@@ -140,8 +140,12 @@
 				<Label>Subtype (int 0-16):</Label>
 			</Field>
 			<Field type="checkbox" id="ignoreDimmer" defaultValue="false">
-				<Label></Label>
-				<Description>Check to Ignore Brightness Values:</Description>
+				<Label>Ignore Brightness Values:</Label>
+				<Description></Description>
+			</Field>
+			<Field type="checkbox" id="reverseActions" defaultValue="false">
+				<Label>Reverse Actions:</Label>
+				<Description>Open = Closed, Closed= Open etc</Description>
 			</Field>
 		</ConfigUI>
 					<UiDisplayStateId>command</UiDisplayStateId>

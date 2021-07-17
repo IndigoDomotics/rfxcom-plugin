@@ -162,7 +162,7 @@ class Plugin(indigo.PluginBase):
 	######################
 	def actionControlDimmerRelay(self, action, dev):
 		self.debugLog(u"Actions...%s"% action.deviceAction)
-		
+
 		###### TURN ON ######
 		if action.deviceAction == indigo.kDeviceAction.TurnOn:
 			# Command hardware module (dev) to turn ON here:
@@ -221,6 +221,7 @@ class Plugin(indigo.PluginBase):
 		elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
 			if (dev.deviceTypeId == "BlindsT1234"):
 				ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
+				reverseActions = bool(dev.pluginProps['reverseActions'])
 				if ignoreDimmer:
 					self.debugLog(u"IgnoreDimmer set within Device.  Turning On/Off with Brightness")
 					if action.actionValue > 0:
