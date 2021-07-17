@@ -139,6 +139,10 @@
 			<Field id="subtype" type="textfield" defaultValue="6">
 				<Label>Subtype (int 0-16):</Label>
 			</Field>
+			<Field type="checkbox" id="ignoreDimmer" defaultValue="false">
+				<Label></Label>
+				<Description>Check to Ignore Brightness Values:</Description>
+			</Field>
 		</ConfigUI>
 					<UiDisplayStateId>command</UiDisplayStateId>
 		<States>
