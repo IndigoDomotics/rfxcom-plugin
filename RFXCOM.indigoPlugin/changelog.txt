@@ -1,0 +1,6 @@
+Changelog
+
+3.0.1
+Update plugin to Python 3 API Version
+Complicated by Bytes/String objects and 254 ord's!
+Major functions all working... now for more testing.

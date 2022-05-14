@@ -8,7 +8,7 @@
 import os
 import sys
 import re
-import Queue
+#import Queue
 import serial
 import threading
 import time
