@@ -1,5 +1,10 @@
 Changelog
 
+3.0.2
+Bug fix for unhandled device not being bytestring (was being sent via function with a %s command!  Took a while to track that down)
+Re-add some Ord for reading of device information from Indigo Devices.
+More testing the merry across more devices the better...
+
 3.0.1
 Update plugin to Python 3 API Version
 Complicated by Bytes/String objects and 254 ord's!

@@ -778,6 +778,7 @@ class RFXTRX(object):
                     return None
 
                 datalen = ord(data)
+             #   indigo.server.log(f"data: {data} and type(data) {type(data)} and datalen:{datalen}")
                 datastr += data
                 rcvdlen = 0
                 while rcvdlen < datalen:
@@ -813,6 +814,8 @@ class RFXTRX(object):
 
     def processPacket(self, data):
         self.logdata(data, "processing")
+
+        self.plugin.debugLog(f"processPacket: Data: {data} and type {type(data)}")
 
         if len(data) > 1:
             if data[1] == 22:
@@ -861,7 +864,7 @@ class RFXTRX(object):
             elif self.ord_replace(data[1]) == 3:
                 self.handleUndecoded(data)
             else:
-                self.handleUnknownDeviceType(self.ord_replace(data[1]))
+                self.handleUnknownDeviceType(data[1])
 
             self.plugin.debugLog(u"++++++++++++++")
 
@@ -1254,7 +1257,7 @@ class RFXTRX(object):
             self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
         # self._finalizeStatesChanges()
         else:
-            self.handleUnknownDevice(devicetype, "%s" % (data))
+            self.handleUnknownDevice(devicetype, data)
 
     def showRain(self, data):
         devicetype = self.ord_replace(data[1])
@@ -2110,8 +2113,10 @@ class RFXTRX(object):
             if sensorasdata == False:  ## send the whole data packet here for Blinds
                 self.plugin.errorLog(u"unknown device detected (id = %s, type = %d). Select a %s from the list of devices" % (sensorid, devicetype, devicetext))
             else:
-                subtype = int(self.ord_replace(sensorid[2]))
-                adres = self.ord_replace(sensorid[7])
+                self.plugin.debugLog(f"{sensorid} SensorId2: {sensorid[2]}, and sensorid type: {type(sensorid)}")
+                subtype = int(sensorid[2])
+                adres =sensorid[7]
+
                 hexhouse = ''.join(["%02X" % self.ord_replace(char) for char in sensorid[4:7]]).strip()
                 self.plugin.errorLog(u"Unknown device detected (type = %d). Select a %s from the list of devices" % (devicetype, devicetext))
                 self.plugin.errorLog(u"HouseCode (hex)=" + str(hexhouse) + u' ,subtype (int)=' + str(subtype) + u' ,unitCode (int)=' + str(int(adres)))
@@ -2519,9 +2524,9 @@ class RFXTRX(object):
                 self.devicesCopy[sensor] = dev
         elif dev.deviceTypeId == u'ARCSwitch':
             adres = dev.pluginProps['address']
-            sensor = (self.ord_replace(adres[0]) * 100) + int(adres[1:3])
+            sensor = (ord(adres[0]) * 100) + int(adres[1:3])
             if not force:
-                self.plugin.debugLog(u"Adding ARC Switch (KaKu with wheels) %s (%s)." % (adres, sensor))
+                self.plugin.debugLog(f"Adding ARC Switch (KaKu with wheels) %{adres} {sensor}" )
             else:
                 if sensor in self.devicesCopy:    del self.devicesCopy[sensor]
                 dev = indigo.devices[dev.id]
@@ -2529,7 +2534,7 @@ class RFXTRX(object):
                 self.devicesCopy[sensor] = dev
         elif dev.deviceTypeId == u'RollerTrolRemote':
             adres = dev.pluginProps['address']
-            sensor = (self.ord_replace(adres[0]) * 100) + int(adres[1:3])
+            sensor = (ord(adres[0]) * 100) + int(adres[1:3])
             if not force:
                 self.plugin.debugLog(u"Adding RollerTrol Remote %s (%s)." % (adres, sensor))
             else:
@@ -2539,7 +2544,7 @@ class RFXTRX(object):
                 self.devicesCopy[sensor] = dev
         elif dev.deviceTypeId == u'BlindsRemote':
             adres = dev.pluginProps['address']
-            sensor = int(self.ord_replace(adres[0]) * 100) + int(adres[1:3])
+            sensor = int(ord(adres[0]) * 100) + int(adres[1:3])
             if not force:
                 self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres, sensor))
             else:
@@ -2570,7 +2575,7 @@ class RFXTRX(object):
 
         elif dev.deviceTypeId == u'X10Switch':
             adres = dev.pluginProps['address']
-            sensor = (self.ord_replace(adres[0]) * 100) + int(adres[1:3])
+            sensor = (ord(adres[0]) * 100) + int(adres[1:3])
             if not force:
                 self.plugin.debugLog(u"Adding X10 Switch %s (%s)." % (adres, sensor))
             else:
