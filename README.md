@@ -10,10 +10,42 @@ large number of protocols. See also
 
 Some updates to Plugin by GlennNZ
 
+#### 3.0.2
+
+Bug fix for unhandled device not being bytestring (was being sent via function with a %s command! Took a while to track that down)
+Re-add some Ord for reading of device information from Indigo Devices.
+More testing the merry across more devices the better...
+
+#### 3.0.1
+
+Update plugin to Python 3 API Version
+Complicated by Bytes/String objects and 254 ord's!
+Major functions all working... now for more testing.
+
+#### 2.3.0
+
+Add Device Setting to Reverse Actions
+
+#### 2.2.8
+
+Continued changes supporting Dimmer
+
+#### 2.2.6
+
+Add Blinds T1234 Device Option to convert Brightness level settings to On/Off
+[Avoids breaking BlindsT1234 that support dimmerValues]
+
+#### 2.2.5
+
+Convert all BlindsT1234 Devices to Dimmers so that natively supported as Blinds in Alexa Native plugin.py
+
+#### 2.2.4
+
+Fix handlSecurity typo
+
 #### 2.2.3
 Add blindState to BlindsT1234 device - Open/Closed/or Partial 
 ![](https://github.com/Ghawken/rfxcom-plugin/blob/master/Images/DeviceStatesUpdate.png?raw=true)
-
 
 Update lastcommand and lastUpdate to include both remote commands, but also Sent commands
 Below for Subtype=3 Motorlux Blinds ONLY:
@@ -21,12 +53,9 @@ Below for Subtype=3 Motorlux Blinds ONLY:
 - Because all unitcodes are sent as 1, any same physical remote devices with different unitcodes/channels will be updated together incorrectly)
 - Ideally in this scenario should use a different physical remote for groups of blinds wish to control/be correctly updated in Indigo
 
-
-
 #### 2.2.2
 Add action Groups Open/Close/Stop/Program/Limit for all BlindsT1234 devices
 (obviously all may not work correctly on all devices - but option exists)
-
 
 #### 2.2.1
 August 2020
