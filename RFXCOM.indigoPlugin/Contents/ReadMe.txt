@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 At this moment the following devices are more or less supported:
 
 	<Device type="relay" id="X10Appliance">		&&RFX TX type 0x10, subtype 0x00

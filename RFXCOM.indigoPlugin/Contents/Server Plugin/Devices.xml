@@ -125,7 +125,55 @@
 		</ConfigUI>
 		<States>
 		</States>
-	</Device>		
+	</Device>
+
+	<Device type="dimmer" id="BlindsT1234">
+		<Name>BlindsT1234</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="000000">
+				<Label>Housecode (Hex format FFFFFF):</Label>
+			</Field>
+			<Field id="unit" type="textfield" defaultValue="1">
+				<Label>Unitcode: (int) </Label>
+			</Field>
+			<Field id="subtype" type="textfield" defaultValue="6">
+				<Label>Subtype (int 0-16):</Label>
+			</Field>
+			<Field type="checkbox" id="ignoreDimmer" defaultValue="false">
+				<Label>Ignore Brightness Values:</Label>
+				<Description></Description>
+			</Field>
+			<Field type="checkbox" id="reverseActions" defaultValue="false">
+				<Label>Reverse Actions:</Label>
+				<Description>Open = Closed, Closed= Open etc</Description>
+			</Field>
+		</ConfigUI>
+					<UiDisplayStateId>command</UiDisplayStateId>
+		<States>
+			<State id="command">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Command</TriggerLabel>
+				<ControlPageLabel>Command</ControlPageLabel>
+			</State>
+			<State id="blindState">
+				<ValueType>String</ValueType>
+				<TriggerLabel>State of Blind - Open/Closed/Part</TriggerLabel>
+				<ControlPageLabel>State of Blind - Open/Closed/Part</ControlPageLabel>
+			</State>
+			<State id="type">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="lastUpdated">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+		</States>
+
+
+	</Device>
 
 	<Device type="relay" id="Brel">
 		<Name>Brel</Name>

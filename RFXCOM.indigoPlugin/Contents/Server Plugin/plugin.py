@@ -38,8 +38,16 @@ class Plugin(indigo.PluginBase):
     
 	######################
 	def deviceStartComm(self, dev):
-		self.debugLog(u"<<-- entering deviceStartComm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))
-		self.RFXTRX.deviceStart(dev)
+		self.debugLog(u"<<-- entering Comm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))
+		##  Change BlindsT1234 to Dimmers here
+		if dev.deviceTypeId=="BlindsT1234":
+			if hasattr(dev, 'brightness') == False:  ## Not a dimmer, convert..
+				self.logger.debug("onState Not in Props converting device..")
+				device = indigo.device.changeDeviceTypeId(dev, dev.deviceTypeId)
+				device.replaceOnServer()
+				self.RFXTRX.deviceStart(device)
+		else:
+			self.RFXTRX.deviceStart(dev)
     
 	def deviceStopComm(self, dev):
 		self.debugLog(u"<<-- entering deviceStopComm: %s (%d - %s)" % (dev.name, dev.id, dev.deviceTypeId))
@@ -154,7 +162,7 @@ class Plugin(indigo.PluginBase):
 	######################
 	def actionControlDimmerRelay(self, action, dev):
 		self.debugLog(u"Actions...%s"% action.deviceAction)
-		
+
 		###### TURN ON ######
 		if action.deviceAction == indigo.kDeviceAction.TurnOn:
 			# Command hardware module (dev) to turn ON here:
@@ -166,7 +174,6 @@ class Plugin(indigo.PluginBase):
 			if sendSuccess:			
 				# If success then log that the command was successfully sent.
 				self.debugLog(u"sent \"%s\" %s" % (dev.name, "on"))
-                
 				# And then tell the Indigo Server to update the state.
 				dev.updateStateOnServer("onOffState", True)
 			else:
@@ -212,6 +219,16 @@ class Plugin(indigo.PluginBase):
         
 		###### SET BRIGHTNESS ######
 		elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
+			if (dev.deviceTypeId == "BlindsT1234"):
+				ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
+				reverseActions = bool(dev.pluginProps['reverseActions'])
+				if ignoreDimmer:
+					self.debugLog(u"IgnoreDimmer set within Device.  Turning On/Off with Brightness")
+					if action.actionValue > 0:
+						action.actionValue = 100
+					elif action.actionValue == 0:
+						action.actionValue = 0
+
 			if self.RFXTRX.SetBrightLevel(action, dev, action.actionValue) == True:
 				sendSuccess = True		# Set to False if it failed.
 			newBrightness = action.actionValue

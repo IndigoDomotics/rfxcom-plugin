@@ -375,7 +375,9 @@ class RFXTRX(object):
 		elif dev.deviceTypeId == 'A-OK_RF01':
 			return 0x02	
 		elif dev.deviceTypeId == 'A-OK_AC114':
-			return 0x03								
+			return 0x03
+		elif dev.deviceTypeId == 'BlindsT1234':
+			return 0x06
 		elif dev.deviceTypeId == 'Brel':
 			return 0x06					
 		elif dev.deviceTypeId == 'Somfy':
@@ -507,6 +509,7 @@ class RFXTRX(object):
 
 					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
 					self.plugin.debugLog("housecode:%s" % dev.pluginProps['unit'])
+					self.plugin.debugLog(u"address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
 					housecode = chr(int(dev.pluginProps['unit']))
 					self.plugin.debugLog("device type:%s" % dev.deviceTypeId)
 					self.plugin.debugLog("device subtype:%s / Command:%s" % (self.ReturnLightType(action, dev),command))			
@@ -514,6 +517,75 @@ class RFXTRX(object):
 					level=int(round(BrightLevel/3.23))
 					self.plugin.debugLog("device level:%s" % (level))
 					packdata = chr(0x19)+devtype+chr(0x00)+chr(adres1)+chr(adres2)+chr(adres3)+housecode+commcode+chr(0x00)
+					self.logdata(packdata,"PackData:=")
+				elif (dev.deviceTypeId=="BlindsT1234"):
+					adres1 = int(dev.pluginProps['address'][0:2],16)
+					adres2 = int(dev.pluginProps['address'][2:4],16)
+					adres3 = int(dev.pluginProps['address'][4:6],16)
+					subtype = chr(int(dev.pluginProps['subtype']))
+					ignoreDimmer = bool(dev.pluginProps['ignoreDimmer'])
+					reverseActions = bool(dev.pluginProps['reverseActions'])
+					if ignoreDimmer:
+						self.plugin.debugLog(u"ignoreDimmer set within Device.  Turning On/Off with Brightness")
+						if command == "Brightness" or command == "Bright":
+							if reverseActions== False:
+								if BrightLevel>0:
+									command = "On"
+									commcode = chr(0x01)
+								elif BrightLevel==0:
+									command = "Off"
+									commcode = chr(0x00)
+					if reverseActions:
+						if command == "Brightness":
+							if BrightLevel > 0:
+								command = "Off"
+								commcode = chr(0x00)
+							elif BrightLevel == 0:
+								command = "On"
+								commcode = chr(0x01)
+						elif command == "Bright":
+							if BrightLevel > 0:
+								command = "Off"
+								commcode = chr(0x00)
+							elif BrightLevel == 0:
+								command = "On"
+								commcode = chr(0x01)
+						elif command == "Off":
+							command = "On"
+							commcode = chr(0x01)
+						elif command == "On":
+							command = "Off"
+							commcode = chr(0x00)
+
+					## use subtype in device Device will enable wider support
+					self.plugin.debugLog(u"Address %s" % dev.pluginProps['address'])
+					self.plugin.debugLog(u"Unit:%s" % dev.pluginProps['unit'])
+					self.plugin.debugLog(u"Address1 and 2 and 3 = %s , %s , %s " % (adres1, adres2, adres3))
+					#self.plugin.debugLog(u"Ignore Dimmer:"+unicode(ignoreDimmer))
+					housecode = chr(int(dev.pluginProps['unit']))
+					self.plugin.debugLog("device type:%s" % dev.deviceTypeId)
+					self.plugin.debugLog("device subtype:%s / Command:%s" % (subtype,command))
+					#devtype = chr(self.ReturnLightType(action, dev))
+					level=int(round(BrightLevel/3.23))
+					self.plugin.debugLog("device level:%s" % (level))
+					## update indigo device state - otherwise when action called no state changes
+					## presume successful state
+					if command == "Off":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=True)
+						self._addToBatchStatesChange(dev, key="blindState", value="Open")
+						#self._addToBatchStatesChange(dev, key="brightnessLevel", value=0)
+					elif command == "On":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
+						self._addToBatchStatesChange(dev, key="blindState", value="Closed")
+						#self._addToBatchStatesChange(dev, key="brightnessLevel", value=100)
+					elif command == "Stop":
+						self._addToBatchStatesChange(dev, key=u"onOffState", value=False)
+						self._addToBatchStatesChange(dev, key="blindState", value="Partial")
+					#self._addToBatchStatesChange(dev, key=u"type", value=subtype)
+					self._addToBatchStatesChange(dev, key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
+					self._addToBatchStatesChange(dev, key=u"command", value=command)
+					packdata = chr(0x19)+subtype+chr(0x00)+chr(adres1)+chr(adres2)+chr(adres3)+housecode+commcode+chr(0x00)
+					self.logdata(packdata,"PackData:=")
 				elif (dev.deviceTypeId=="Somfy"):
 					if command=='Off':
 						commcode=chr(0x0F)
@@ -757,9 +829,10 @@ class RFXTRX(object):
 			elif ord(data[1])==24:
 				self.triggerRollerTrolRemote(data)	
 			elif ord(data[1])==25:
-				self.triggerBlindsRemote(data)					
+				#self.triggerRollerTrolRemote(data)
+				self.triggerBlindsRemote(data)
 			elif ord(data[1])==32:
-				self.handleSecurity(data)				
+				self.handleSecurity(data)
 			elif ord(data[1])==48:
 				self.triggerPCRemote(data)
 			elif ord(data[1])==87:
@@ -1138,12 +1211,17 @@ class RFXTRX(object):
 		housecode=(ord(data[4])*10000)+(ord(data[5])*100)+ord(data[6])
 		adres=ord(data[7])
 		sensor = int((ord(data[4])*1000000)+(ord(data[5])*10000)+(ord(data[6])*100)+ord(data[7]))
-		commcode=ord(data[8])	
- 		self.plugin.debugLog(u"Blinds Remote with id1-3 %s and unitcode %s command %s received" % (housecode, adres, commcode))		
+		#sensor = int((adres1 * 1000000) + (adres2 * 10000) + (adres3 * 100) + housecode)
+		commcode=ord(data[8])
+ 		self.plugin.debugLog(u"Blinds Remote with id1-3 %s and unitcode %s command %s received" % (housecode, adres, commcode))
+		self.plugin.debugLog(u"Blinds Remote with subtype %s and sensor %s received" % (subtype, sensor))
+		hexhouse = ''.join(["%02X" % ord(char) for char in data[4:7]]).strip()
+		subtype = int(subtype)
+		self.plugin.debugLog(u"Enter the below into Device Details:  HouseCode (hex):"+unicode(hexhouse) + u', Subtype (int):'+unicode(subtype)+ u'& UnitCode (int):'+unicode(int(adres)))
 		if commcode==0:
 			commando = "Open"
 		elif commcode==1:
-			commando = "Close"	
+			commando = "Close"
 		elif commcode==2:
 			commando = "Stop"	
 		elif commcode==3:
@@ -1155,11 +1233,20 @@ class RFXTRX(object):
 		if sensor in self.devicesCopy.keys():
 			self.plugin.debugLog(u"Switch Command %s in list, command=%s" % (sensor,commando))
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"command", value=commando)
+			if commcode== 0:
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=True)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Open")
+			elif commcode == 1 :
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=False)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Closed")
+			elif commcode == 2:
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"onOffState", value=False)
+				self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"blindState", value="Partial")
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"type", value=subtype)
 			self._addToBatchStatesChange(self.devicesCopy[sensor], key=u"lastUpdated", value=time.strftime('%Y/%m/%d %H:%M:%S'))
 			#self._finalizeStatesChanges()
 		else:
-			self.handleUnknownDevice(devicetype,"%s" % (sensor))
+			self.handleUnknownDevice(devicetype,"%s" % (data))
 
 	def showRain(self, data):
 		devicetype=ord(data[1])
@@ -1972,7 +2059,8 @@ class RFXTRX(object):
 
 	def handleUnknownDevice(self, devicetype, sensorid):
 		if self.plugin.unknownAsError == True:
-			if devicetype==22:		
+			sensorasdata = False   ## change some of unknown devices to sending whole packet to easier show the correct device entry
+			if devicetype==22:
 				devicetext="Doorbell"			
 			elif devicetype==78:		
 				devicetext="BBQ sensor"		
@@ -2001,7 +2089,8 @@ class RFXTRX(object):
 			elif devicetype==24: 	
 				devicetext="RollerTrol Remote"			
 			elif devicetype==25: 	
-				devicetext="Blinds Remote"		
+				devicetext="BlindsT1234 Device"
+				sensorasdata = True
 			elif devicetype==32: 	
 				devicetext="X10 Security sensor"
 			elif devicetype==48: 	
@@ -2012,8 +2101,18 @@ class RFXTRX(object):
 				devicetext="ELEC1 Current sensor"
 			elif devicetype==90: 	
 				devicetext="ELEC2 Energy Usage Sensor"									
-			self.plugin.errorLog(u"unknown device detected (id = %s, type = %d). Select a %s from the list of devices" % (sensorid,devicetype,devicetext))
-			
+			if sensorasdata==False:  ## send the whole data packet here for Blinds
+				self.plugin.errorLog(u"unknown device detected (id = %s, type = %d). Select a %s from the list of devices" % (sensorid,devicetype,devicetext))
+			else:
+				subtype = int(ord(sensorid[2]))
+				adres = ord(sensorid[7])
+				hexhouse = ''.join(["%02X" % ord(char) for char in sensorid[4:7]]).strip()
+				self.plugin.errorLog(u"Unknown device detected (type = %d). Select a %s from the list of devices" % (devicetype,devicetext))
+				self.plugin.errorLog(u"HouseCode (hex)=" + unicode(hexhouse)+ u' ,subtype (int)=' + unicode(subtype) + u' ,unitCode (int)=' + unicode(int(adres)))
+				if subtype == 3:
+					self.plugin.errorLog(u"For SubType 3 Blinds, the multichannel remotes and the unitcode may not be correctly received.")
+					self.plugin.errorLog(u"Commands can still be transmitted, by entering the correct unit code. ")
+					self.plugin.errorLog(u"Created devices may not be correctly updated as distinguishing units is not possible")
 	def logdata(self,packdata,debugstr):
 		if packdata is None:
 			self.plugin.debugLog(u"%s: none" % (debugstr))	
@@ -2439,6 +2538,27 @@ class RFXTRX(object):
 				dev = indigo.devices[dev.id]
 			if sensor not in self.devicesCopy.keys():
 				self.devicesCopy[sensor] = dev
+		elif dev.deviceTypeId == u'BlindsT1234':
+
+			adres = dev.pluginProps['address']
+			subtype = chr(int(dev.pluginProps['subtype']))
+			unit = dev.pluginProps['unit']
+			adres1 = int(dev.pluginProps['address'][0:2], 16)
+			adres2 = int(dev.pluginProps['address'][2:4], 16)
+			adres3 = int(dev.pluginProps['address'][4:6], 16)
+			housecode = int(dev.pluginProps['unit'])
+			self.plugin.debugLog(u'address1,2,3,unitcode = %s , %s , %s , %s ' % (adres1, adres2,adres3,housecode))
+
+			sensor = int( (adres1 * 1000000) + (adres2 * 10000) + (adres3 * 100) + housecode )
+			#sensor = (ord(adres[0])*100)+int(adres[1:3])
+			if not force:
+				self.plugin.debugLog(u"Adding Blinds Remote %s (%s)." % (adres,sensor))
+			else:
+				if sensor in self.devicesCopy:	del self.devicesCopy[sensor]
+				dev = indigo.devices[dev.id]
+			if sensor not in self.devicesCopy.keys():
+				self.devicesCopy[sensor] = dev
+
 		elif dev.deviceTypeId == u'X10Switch':
 			adres = dev.pluginProps['address']
 			sensor = (ord(adres[0])*100)+int(adres[1:3])
